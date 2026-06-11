@@ -10,7 +10,7 @@ Anyone can add a new task or a new model in about 10 minutes. This guide walks t
 git clone https://github.com/patibandlavenkatamanideep/RealDataAgentBench
 cd RealDataAgentBench
 pip install -e ".[dev]"
-pytest            # 150 tests, all offline — no API key needed
+pytest            # 168 tests, all offline — no API key needed
 ```
 
 ---
@@ -219,7 +219,7 @@ GENERATORS = {
 ## Running tests
 
 ```bash
-pytest                                     # 150 tests, ~25s, no API key needed
+pytest                                     # 168 tests, ~25s, no API key needed
 pytest --cov=realdataagentbench           # with coverage
 pytest tests/test_eda_generators.py -v    # single file
 ```
@@ -229,12 +229,12 @@ pytest tests/test_eda_generators.py -v    # single file
 ## Submitting a pull request
 
 1. Fork → feature branch: `git checkout -b feat/my-task`
-2. Make changes, run `pytest` — all 150 must pass.
+2. Make changes, run `pytest` — all 168 must pass.
 3. `dab run <task_id> --dry-run` for any new task.
 4. Open a PR. CI runs automatically.
 
 **PR checklist:**
-- [ ] `pytest` passes locally (150 tests)
+- [ ] `pytest` passes locally (168 tests)
 - [ ] New task validates with `dab run <id> --dry-run`
 - [ ] Scoring weights sum to 1.0
 - [ ] Generator uses `default_rng(seed)` for reproducibility
