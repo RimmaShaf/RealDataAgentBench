@@ -1,4 +1,11 @@
-"""Sandboxed tools available to the agent during benchmark execution."""
+"""Tools available to the agent during benchmark execution.
+
+NOTE: ``run_code`` executes model-generated Python in a *restricted namespace*,
+not a security sandbox. The ``__builtins__`` allowlist is trivially escapable
+(e.g. ``().__class__.__bases__[0].__subclasses__()`` reaches ``os`` and file
+handles without any builtin). This is acceptable only for local runs against
+trusted providers. Do not treat it as an isolation boundary — see SECURITY.md.
+"""
 
 from __future__ import annotations
 
@@ -11,7 +18,10 @@ import pandas as pd
 
 
 def run_code(code: str, dataframe: pd.DataFrame) -> dict:
-    """Execute Python code in a restricted namespace; return stdout + error."""
+    """Execute Python code in a restricted namespace; return stdout + error.
+
+    The namespace restriction is *not* a security boundary (see module docstring).
+    """
     namespace = {
         "df": dataframe,
         "pd": pd,

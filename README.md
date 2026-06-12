@@ -24,7 +24,7 @@
 
 - **12 models · 39 tasks · 4-dimensional scoring** — correctness alone misses where agents fail in production data workflows
 - **gpt-4.1 leads at 0.875** — statistically tied with gpt-4.1-mini (0.870) at 65× higher cost per task; gpt-4.1-mini is the dominant cost-performance choice
-- **A free model (Llama 3.3-70b, 0.798) scores higher than GPT-5 (0.780)** — both on 39-task full coverage; GPT-5 scores on 23/39 tasks (single-run, cost-prohibitive to scale), so the gap is directional, not a head-to-head match
+- **A free model (Llama 3.3-70b, 0.798) scores higher than GPT-5 (0.780)** — Llama at 39/39 tasks with multi-run CI; GPT-5 covered only 23/39 tasks single-run (cost-prohibitive to scale), so treat this as directional, not a head-to-head match
 - **Statistical validity is the differentiating dimension:** Claude leads on validity (Sonnet 0.851), GPT leads on correctness (gpt-4.1-mini 0.931) — the two correlate at r = 0.43, confirming they capture orthogonal capabilities
 - **Prompting partly closes the stat-validity gap** — explicit uncertainty instructions raised GPT-4.1's mean stat_validity from 0.550 to 1.000 (+0.450), but qualitative review shows the gain is genuine on metric-reporting tasks and primarily lexical on feature importance tasks
 
@@ -54,7 +54,7 @@
 > ✓ = full 39-task multi-run CI &nbsp;·&nbsp; † = CI in progress &nbsp;·&nbsp; ⚠️ = single-run point estimate, no CI planned (cost-prohibitive)  
 > **Ranking requires ≥80% task coverage** — see [SCORING_SPEC.md §10](SCORING_SPEC.md#10-ranking-eligibility--coverage-threshold)
 
-> **Coverage caveats:** Models marked ⚠️ (Claude Sonnet, Claude Opus, GPT-5) cover 23/39 tasks — single-run, cost-prohibitive to scale. Their scores are point estimates with no CI and are not ranked. Cross-model comparisons involving ⚠️ models are directional signals, not controlled head-to-head results. Llama 3.3-70b vs GPT-5 (0.798 vs 0.780) is the most headline-able comparison — both at 39/39 full coverage — but GPT-5's 23-task exposure means it ran a different (easier) task mix. Findings that reference these models note this explicitly; all other findings involve ranked (✓) models only.
+> **Coverage caveats:** Models marked ⚠️ (Claude Sonnet, Claude Opus, GPT-5) cover 23/39 tasks — single-run, cost-prohibitive to scale. Their scores are point estimates with no CI and are not ranked. Cross-model comparisons involving ⚠️ models are directional signals, not controlled head-to-head results. Llama 3.3-70b vs GPT-5 (0.798 vs 0.780) is the most headline-able comparison — Llama at 39/39 full coverage with multi-run CI, but GPT-5's 23/39 single-run exposure means it ran a different (and likely easier) task mix, so the comparison is directional only. Findings that reference these models note this explicitly; all other findings involve ranked (✓) models only.
 
 ---
 
@@ -128,7 +128,7 @@ Every model computes the right feature importances or coefficients — then stop
 Claude Opus and Haiku loop over `get_column_stats` on every column one-by-one, re-running the same `run_code` block with minor variations. Correct intermediate outputs, 5–15× the token budget. Efficiency scores as low as 0.12.
 
 **Pattern 3 — Namespace blind spot** (grok-3-mini, all modeling tasks):  
-Grok-3-mini attempts to import sklearn inside `run_code`, hits the sandbox restriction, retries repeatedly, and occasionally gives up entirely. The model never adapts to the pre-injected namespace. 7 zero-correctness runs on tasks it could theoretically solve.
+Grok-3-mini attempts to import sklearn inside `run_code`, hits the namespace restriction, retries repeatedly, and occasionally gives up entirely. The model never adapts to the pre-injected namespace. 7 zero-correctness runs on tasks it could theoretically solve.
 
 **Pattern 4 — Gemini over-truncates** (`mod_003`, `model_002`, `feat_005`):  
 Gemini 2.5 Flash produces structurally correct code but truncates its final answer before reporting key metrics. Avg correctness = 0.58 despite reasonable reasoning — it reaches the right place but doesn't output a scoreable conclusion.
@@ -305,7 +305,7 @@ Key result at [top](#uncertainty-prompting-experiment--headline-result). Per-mod
 
 **`dab run <task> --dry-run`** — Validates dataset loading and YAML parsing. No API call. Use this to verify your environment.
 
-**`dab run <task>`** — Live mode. The agent receives a sandboxed Python environment with the seeded dataset pre-loaded and iterates until it produces a final answer or hits the step/timeout limit. Every tool call, token count, and final answer is recorded in the trace JSON. No simulation, no pre-cached responses — every leaderboard score is from a live API call.
+**`dab run <task>`** — Live mode. The agent receives a restricted Python namespace (not a security sandbox — see [SECURITY.md](SECURITY.md)) with the seeded dataset pre-loaded and iterates until it produces a final answer or hits the step/timeout limit. Every tool call, token count, and final answer is recorded in the trace JSON. No simulation, no pre-cached responses — every leaderboard score is from a live API call.
 
 **Datasets:** Seeded synthetic generators (33 tasks) and publicly licensed UCI/sklearn datasets (6 tasks). All generated locally at runtime. Trace outputs write to your local `outputs/` directory.
 
@@ -337,7 +337,7 @@ realdataagentbench/
 ├── datasets/
 │   └── generators/       # 33 seeded synthetic generators + 6 real-data loaders
 ├── harness/
-│   ├── tools.py          # Sandboxed agent tools (run_code, get_dataframe_info, get_column_stats)
+│   ├── tools.py          # Agent tools in a restricted namespace (run_code, get_dataframe_info, get_column_stats)
 │   ├── tracer.py         # Records every step, tool call, and token count
 │   ├── agent.py          # Multi-model agentic loop
 │   ├── providers.py      # Unified BaseProvider — Anthropic, OpenAI, Groq, xAI, Google
