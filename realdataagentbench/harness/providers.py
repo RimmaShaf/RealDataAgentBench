@@ -114,7 +114,7 @@ MODEL_ALIASES = {
 SYSTEM_PROMPT = """You are an expert data scientist working on a benchmark task.
 You have access to a pandas DataFrame called `df` loaded with the task dataset.
 
-The run_code tool executes Python in a sandboxed namespace. The following are
+The run_code tool executes Python in a restricted namespace. The following are
 pre-imported and ready to use WITHOUT any import statements:
   - np        (numpy)
   - pd        (pandas) — `df` is already loaded

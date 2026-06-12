@@ -1,81 +1,123 @@
 """Tools available to the agent during benchmark execution.
 
-NOTE: ``run_code`` executes model-generated Python in a *restricted namespace*,
-not a security sandbox. The ``__builtins__`` allowlist is trivially escapable
-(e.g. ``().__class__.__bases__[0].__subclasses__()`` reaches ``os`` and file
-handles without any builtin). This is acceptable only for local runs against
-trusted providers. Do not treat it as an isolation boundary — see SECURITY.md.
+``run_code`` executes model-generated Python in a *restricted namespace*. By
+default it runs that code in a short-lived **subprocess** with a wall-clock
+timeout and a CPU-seconds limit, so a namespace escape (e.g.
+``().__class__.__bases__[0].__subclasses__()`` reaching ``os``) lands in a
+disposable child that cannot corrupt or read the benchmark driver's memory and
+gets killed if it runs away. This is process isolation, NOT a full security
+sandbox: without a container there is no network isolation. For untrusted models
+run the whole benchmark inside a container (``--network none``). See SECURITY.md.
+
+Set ``RDAB_SANDBOX=inprocess`` to fall back to the legacy in-process executor
+(faster, no per-call subprocess startup) for local runs against trusted
+providers — explicitly opting out of isolation.
 """
 
 from __future__ import annotations
 
 import io
+import json
+import os
+import pickle
+import subprocess
+import sys
+import tempfile
 import textwrap
 import traceback
 from contextlib import redirect_stdout
 
 import pandas as pd
 
+# Resource limits for the isolated executor. Overridable via env for CI/local.
+_WALL_TIMEOUT_S = float(os.environ.get("RDAB_SANDBOX_TIMEOUT", "60"))
+_CPU_SECONDS = int(os.environ.get("RDAB_SANDBOX_CPU", "60"))
+# Invoke the worker by file path (not ``-m``) so the child imports only
+# pandas/numpy/sklearn — running ``-m`` would trigger harness/__init__.py and
+# pull in the providers/runner (API clients) the child has no need for.
+_WORKER_PATH = os.path.join(os.path.dirname(__file__), "_sandbox_worker.py")
 
-def run_code(code: str, dataframe: pd.DataFrame) -> dict:
-    """Execute Python code in a restricted namespace; return stdout + error.
 
-    The namespace restriction is *not* a security boundary (see module docstring).
-    """
-    namespace = {
-        "df": dataframe,
-        "pd": pd,
-        "__builtins__": {
-            "print": print,
-            "len": len,
-            "range": range,
-            "enumerate": enumerate,
-            "zip": zip,
-            "list": list,
-            "dict": dict,
-            "set": set,
-            "tuple": tuple,
-            "str": str,
-            "int": int,
-            "float": float,
-            "bool": bool,
-            "abs": abs,
-            "round": round,
-            "min": min,
-            "max": max,
-            "sum": sum,
-            "sorted": sorted,
-            "isinstance": isinstance,
-            "type": type,
-            "repr": repr,
-        },
-    }
-    # Safe imports allowed inside the code block
-    _safe_import_whitelist = {
-        "numpy", "np", "pandas", "pd", "scipy", "scipy.stats",
-        "sklearn", "math", "statistics",
-    }
+def _cpu_limit_preexec(cpu_seconds: int):
+    """Return a preexec_fn that caps child CPU time (POSIX only)."""
+    def _set_limits():  # pragma: no cover - runs in the forked child
+        import resource
 
+        resource.setrlimit(resource.RLIMIT_CPU, (cpu_seconds, cpu_seconds))
+
+    return _set_limits
+
+
+def _run_code_inprocess(code: str, dataframe: pd.DataFrame) -> dict:
+    """Legacy in-process executor (no isolation). Used only when opted in."""
+    from realdataagentbench.harness._sandbox_worker import _build_namespace
+
+    namespace = _build_namespace(dataframe)
     buf = io.StringIO()
     try:
-        # Inject safe libraries — these are available without import statements
-        import numpy as np
-        import scipy.stats as stats
-        import sklearn
-        import sklearn.linear_model
-        import sklearn.ensemble
-        import sklearn.preprocessing
-        import sklearn.metrics
-        import sklearn.model_selection
-        namespace["np"] = np
-        namespace["stats"] = stats
-        namespace["sklearn"] = sklearn
-
         with redirect_stdout(buf):
             exec(textwrap.dedent(code), namespace)  # noqa: S102
         return {"output": buf.getvalue(), "error": None}
     except Exception:
         return {"output": buf.getvalue(), "error": traceback.format_exc()}
+
+
+def run_code(code: str, dataframe: pd.DataFrame) -> dict:
+    """Execute agent Python against ``df``; return ``{"output", "error"}``.
+
+    Runs in an isolated subprocess by default (see module docstring). The
+    restricted namespace is *not* a security boundary on its own — isolation
+    comes from the separate process + resource limits.
+    """
+    if os.environ.get("RDAB_SANDBOX") == "inprocess":
+        return _run_code_inprocess(code, dataframe)
+
+    # Hand the dataframe and a result slot to the child via temp files so that
+    # the child's stdout (where agent print() output goes) never collides with
+    # the JSON envelope we read back.
+    tmpdir = tempfile.mkdtemp(prefix="rdab_sandbox_")
+    df_path = os.path.join(tmpdir, "df.pkl")
+    result_path = os.path.join(tmpdir, "result.json")
+    try:
+        with open(df_path, "wb") as fh:
+            pickle.dump(dataframe, fh, protocol=pickle.HIGHEST_PROTOCOL)
+
+        preexec = _cpu_limit_preexec(_CPU_SECONDS) if os.name == "posix" else None
+        try:
+            proc = subprocess.run(
+                [sys.executable, _WORKER_PATH, df_path, result_path],
+                input=code,
+                capture_output=True,
+                text=True,
+                timeout=_WALL_TIMEOUT_S,
+                preexec_fn=preexec,
+            )
+        except subprocess.TimeoutExpired:
+            return {
+                "output": "",
+                "error": f"Execution exceeded the {_WALL_TIMEOUT_S:.0f}s wall-clock limit and was terminated.",
+            }
+
+        if os.path.exists(result_path):
+            with open(result_path) as fh:
+                return json.load(fh)
+
+        # No result file → the child died before writing (CPU limit, OOM, crash).
+        detail = proc.stderr.strip() or f"exit code {proc.returncode}"
+        return {
+            "output": "",
+            "error": f"Execution was terminated before completing ({detail}).",
+        }
+    finally:
+        for path in (df_path, result_path):
+            try:
+                os.remove(path)
+            except OSError:
+                pass
+        try:
+            os.rmdir(tmpdir)
+        except OSError:
+            pass
 
 
 def get_dataframe_info(dataframe: pd.DataFrame) -> dict:

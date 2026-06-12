@@ -55,21 +55,29 @@ please report it immediately so it can be revoked.
 The `run_code` tool executes arbitrary Python provided by LLM agents inside a
 **restricted namespace**. To be explicit about what this is and is not:
 
-- It runs in-process via `exec()` with a trimmed `__builtins__` allowlist.
-- This is **not** a security sandbox. The restriction is trivially escapable —
-  e.g. `().__class__.__bases__[0].__subclasses__()` reaches `os`, file handles,
-  and the network from pure-Python object traversal without needing any builtin
-  or `import` statement. Treat any code passed to `run_code` as code that runs
-  with the **full privileges of the host process**.
-- There is currently no enforced network, filesystem, CPU, or memory isolation.
+- The agent code runs inside a `exec()` namespace with a trimmed
+  `__builtins__` allowlist. That namespace restriction is **not** a security
+  boundary on its own: it is trivially escapable — e.g.
+  `().__class__.__bases__[0].__subclasses__()` reaches `os`, file handles, and
+  the network from pure-Python object traversal without needing any builtin or
+  `import` statement.
+- **Isolation comes from the process, not the namespace.** By default
+  `run_code` executes that code in a short-lived **subprocess** with a
+  wall-clock timeout and a CPU-seconds `RLIMIT_CPU` cap (POSIX). A namespace
+  escape therefore lands in a disposable child that the parent kills on timeout
+  and that cannot read or corrupt the benchmark driver's memory. Limits are
+  configurable via `RDAB_SANDBOX_TIMEOUT` and `RDAB_SANDBOX_CPU`.
+- **What is still NOT enforced:** network and filesystem isolation, and a hard
+  memory cap. The subprocess can still open sockets and read/write files with
+  the privileges of the user running the benchmark.
+- Setting `RDAB_SANDBOX=inprocess` opts out of the subprocess and runs agent
+  code in the driver process — faster, but with no isolation. Use only for
+  local runs against trusted providers.
 
-**Safe usage:** run the benchmark only against trusted providers, on a machine
-where running untrusted Python would be acceptable (e.g. a disposable VM or
-container you control). Do **not** point `run_code` at adversarial or unknown
-model output without real isolation around the whole process.
-
-**Planned hardening (tracked):** move execution into a subprocess with resource
-limits (CPU seconds, memory cap, no network), and ideally a short-lived
-container (`--network none --read-only --memory 512m`), matching the approach
-SWE-bench-style harnesses use. Until that lands, the wording above is the
-accurate description of the threat model.
+**Safe usage for untrusted models:** run the whole benchmark inside a container
+with no network and a read-only filesystem, e.g.
+`docker run --rm --network none --read-only --memory 512m ...`. This is the only
+configuration that closes the network/filesystem/memory gaps above, and is the
+approach SWE-bench-style harnesses use. The built-in subprocess isolation raises
+the bar against runaway and memory-corruption, but is not a substitute for a
+container when running adversarial or unknown model output.

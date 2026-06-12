@@ -25,6 +25,16 @@ def df_with_nulls(sample_df):
 
 
 class TestRunCode:
+    """Contract tests for the executor's namespace/exec logic.
+
+    Run in-process (fast) since that logic is shared byte-for-byte with the
+    isolated path; the subprocess path itself is covered by TestRunCodeIsolation.
+    """
+
+    @pytest.fixture(autouse=True)
+    def _fast_inprocess(self, monkeypatch):
+        monkeypatch.setenv("RDAB_SANDBOX", "inprocess")
+
     def test_basic_print(self, sample_df):
         result = run_code("print(df.shape)", sample_df)
         assert result["error"] is None
@@ -57,6 +67,41 @@ class TestRunCode:
         result = run_code(code, sample_df)
         assert result["error"] is None
         assert result["output"].strip()
+
+
+class TestRunCodeIsolation:
+    """The isolated executor adds guarantees the in-process exec() cannot."""
+
+    def test_runaway_code_hits_wall_timeout(self, sample_df, monkeypatch):
+        # A non-terminating loop must be killed instead of hanging the driver —
+        # something the legacy in-process exec() could never do.
+        from realdataagentbench.harness import tools
+
+        monkeypatch.setattr(tools, "_WALL_TIMEOUT_S", 3.0)
+        result = run_code("while True:\n    pass", sample_df)
+        assert result["error"] is not None
+        assert "limit" in result["error"].lower()
+
+    def test_crash_in_child_does_not_kill_parent(self, sample_df):
+        # An escape reaching os._exit() should terminate only the child; the
+        # driver keeps running and reports a clean error, then the next call works.
+        escape = (
+            "os = [c for c in ().__class__.__bases__[0].__subclasses__()\n"
+            "      if c.__name__ == 'catch_warnings'][0]()._module.__builtins__['__import__']('os')\n"
+            "os._exit(0)"
+        )
+        result = run_code(escape, sample_df)
+        assert result["error"] is not None  # child died before writing a result
+        # Driver survived: a normal call still succeeds afterwards.
+        ok = run_code("print(df.shape)", sample_df)
+        assert ok["error"] is None
+        assert "(200, 3)" in ok["output"]
+
+    def test_inprocess_opt_out(self, sample_df, monkeypatch):
+        monkeypatch.setenv("RDAB_SANDBOX", "inprocess")
+        result = run_code("print(df.shape)", sample_df)
+        assert result["error"] is None
+        assert "(200, 3)" in result["output"]
 
 
 class TestGetDataframeInfo:
