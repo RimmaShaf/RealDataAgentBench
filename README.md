@@ -207,6 +207,32 @@ Weights are defined per-task in the YAML. The full specification — every formu
 
 ---
 
+## Scorer validity
+
+The Stat-Validity scorer is **lexical** — it detects statistical *language* via regex, not statistical *validity*. The central finding ("models use statistical language when cued, not when warranted") is therefore measured by a statistical-language detector, which is a circularity worth confronting directly rather than hiding. So I calibrated the lexical scorer against an **LLM judge** (Claude Haiku 4.5 applying a structured rubric) on a stratified sample of 120 answers (24 per category), and I'm reporting the result as-is — including where it's unflattering.
+
+**Reproduce it:** `python scripts/calibrate_stat_validity.py --n 120 --seed 42 --out docs/scorer_calibration.json` (the committed [docs/scorer_calibration.json](docs/scorer_calibration.json) is that run; judge cost was $0.17).
+
+| Category | n | Lexical mean | Judge mean | Pearson r | Cohen's κ† |
+|----------|:--:|:----:|:----:|:----:|:----:|
+| EDA | 24 | 0.83 | 0.69 | 0.60 | 0.39 |
+| Feature Engineering | 24 | 0.56 | 0.52 | 0.23 | 0.18 |
+| ML Engineering | 24 | 0.77 | 0.72 | 0.39 | 0.35 |
+| Modeling | 24 | 0.60 | 0.58 | 0.23 | 0.42 |
+| Statistical Inference | 24 | 0.95 | 0.88 | 0.15 | 0.18 |
+| **Overall** | **120** | **0.74** | **0.68** | **0.48** | — |
+
+† κ is pooled over the four binary criteria within each category. The `avoids_p_hacking` criterion is degenerate (the lexical check fires positive on 100% of answers), which has no variance and deflates the pooled κ.
+
+**What this says, honestly:**
+
+- **Per-answer agreement is weak.** No category reaches the κ ≥ 0.7 "substantial agreement" bar; overall lexical-vs-judge correlation is r = 0.48. By the calibration script's own interpretation guide, this is the "consider replacing with the judge" band. **Do not over-interpret an individual answer's stat_validity score** — treat it as a noisy proxy.
+- **The disagreement is directional and matches the [gaming examples](SCORING_SPEC.md#4-statistical-validity--range-025--050--075--100).** The lexical scorer **over-credits uncertainty** (flags it on 58% of answers vs. the judge's 33% — keyword salad like "robust and stable, approximately 0.85" scores credit it shouldn't) and **under-credits interpretation** (flags it on 52% vs. the judge's 67% — rigorous answers phrased outside the regex vocabulary are missed). These are exactly the two failure modes the worked examples in SCORING_SPEC §4 demonstrate.
+- **But the category-level conclusions hold up.** The lexical and judge **means track closely** (overall bias is only −0.065, lexical scoring slightly high), and the judge preserves the headline ordering — Feature Engineering is the weakest category and Statistical Inference the strongest under *both* scorers. So [Insight 1](#key-findings) (stat-validity is category-dependent, weakest on feature engineering) survives the judge; what doesn't survive is trusting any *single* answer's lexical score.
+- **Recommendation:** use the lexical scorer as a cheap aggregate signal and pre-filter; for rigorous per-answer work, run the LLM judge as the primary scorer. This is tracked as limitation **L4** in [SCORING_SPEC.md §8](SCORING_SPEC.md#8-honest-limitations--what-we-know-and-plan-to-fix).
+
+---
+
 ## Tasks
 
 39 tasks across 5 categories: EDA (7), Feature Engineering (8), Modeling (8), Statistical Inference (8), ML Engineering (8). 6 use real UCI/sklearn datasets; 33 use seeded synthetic generators. Difficulty spans easy (skewness, log transform) to hard (nested cross-validation, multicollinearity, Simpson's paradox).

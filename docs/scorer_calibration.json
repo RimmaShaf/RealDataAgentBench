@@ -1,0 +1,2574 @@
+{
+  "n_samples": 120,
+  "judge_model": "claude-haiku-4-5-20251001",
+  "seed": 42,
+  "total_input_tokens": 143841,
+  "total_output_tokens": 5640,
+  "estimated_cost_usd": 0.172,
+  "score_correlation_pearson": 0.4783,
+  "mean_lexical_score": 0.7417,
+  "mean_judge_score": 0.6771,
+  "mean_score_delta_judge_minus_lexical": -0.0646,
+  "criterion_stats": {
+    "reports_uncertainty": {
+      "pct_agreement": 0.7167,
+      "cohen_kappa": 0.4632,
+      "lexical_positive_rate": 0.5833,
+      "judge_positive_rate": 0.3333
+    },
+    "uses_appropriate_test": {
+      "pct_agreement": 0.75,
+      "cohen_kappa": 0.1018,
+      "lexical_positive_rate": 0.85,
+      "judge_positive_rate": 0.8167
+    },
+    "interprets_correctly": {
+      "pct_agreement": 0.6083,
+      "cohen_kappa": 0.2074,
+      "lexical_positive_rate": 0.5167,
+      "judge_positive_rate": 0.675
+    },
+    "avoids_p_hacking_signals": {
+      "pct_agreement": 0.8833,
+      "cohen_kappa": 0.0,
+      "lexical_positive_rate": 1.0,
+      "judge_positive_rate": 0.8833
+    }
+  },
+  "category_stats": {
+    "eda": {
+      "n": 24,
+      "pearson_r": 0.6036,
+      "cohen_kappa_pooled": 0.3889,
+      "mean_lexical": 0.8333,
+      "mean_judge": 0.6875
+    },
+    "feature_engineering": {
+      "n": 24,
+      "pearson_r": 0.2252,
+      "cohen_kappa_pooled": 0.184,
+      "mean_lexical": 0.5625,
+      "mean_judge": 0.5208
+    },
+    "ml_engineering": {
+      "n": 24,
+      "pearson_r": 0.386,
+      "cohen_kappa_pooled": 0.3524,
+      "mean_lexical": 0.7656,
+      "mean_judge": 0.7188
+    },
+    "modeling": {
+      "n": 24,
+      "pearson_r": 0.2344,
+      "cohen_kappa_pooled": 0.4194,
+      "mean_lexical": 0.599,
+      "mean_judge": 0.5833
+    },
+    "statistical_inference": {
+      "n": 24,
+      "pearson_r": 0.1448,
+      "cohen_kappa_pooled": 0.1746,
+      "mean_lexical": 0.9479,
+      "mean_judge": 0.875
+    }
+  },
+  "top_disagreements": [
+    {
+      "task_id": "stat_004",
+      "category": "statistical_inference",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.75
+    },
+    {
+      "task_id": "mod_006",
+      "category": "ml_engineering",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.75
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.75
+    },
+    {
+      "task_id": "feat_005",
+      "category": "feature_engineering",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.75
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.5
+    }
+  ],
+  "all_results": [
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260410T124925.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.5
+    },
+    {
+      "task_id": "eda_003",
+      "category": "eda",
+      "file": "eda_003_20260410T073605.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "model_010",
+      "category": "modeling",
+      "file": "model_010_20260426T190538.json",
+      "lexical": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260427T160420.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "model_001",
+      "category": "modeling",
+      "file": "model_001_20260426T180719.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "mod_005",
+      "category": "ml_engineering",
+      "file": "mod_005_20260426T172320.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "feat_006",
+      "category": "feature_engineering",
+      "file": "feat_006_20260426T053431.json",
+      "lexical": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.5
+    },
+    {
+      "task_id": "mod_006",
+      "category": "ml_engineering",
+      "file": "mod_006_20260426T172452.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_009",
+      "category": "ml_engineering",
+      "file": "mod_009_20260426T162457.json",
+      "lexical": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260426T182254.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "eda_006",
+      "category": "eda",
+      "file": "eda_006_20260426T165949.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "stat_002",
+      "category": "statistical_inference",
+      "file": "stat_002_20260428T123041.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260428T071425.json",
+      "lexical": {
+        "score": 0.375,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.125
+    },
+    {
+      "task_id": "feat_005",
+      "category": "feature_engineering",
+      "file": "feat_005_20260428T071645.json",
+      "lexical": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "eda_005",
+      "category": "eda",
+      "file": "eda_005_20260428T081122.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "stat_005",
+      "category": "statistical_inference",
+      "file": "stat_005_20260427T072110.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_001",
+      "category": "ml_engineering",
+      "file": "mod_001_20260426T031807.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_003",
+      "category": "ml_engineering",
+      "file": "mod_003_20260410T080912.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "stat_010",
+      "category": "statistical_inference",
+      "file": "stat_010_20260427T073931.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "eda_001",
+      "category": "eda",
+      "file": "eda_001_20260426T024029.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "mod_001",
+      "category": "ml_engineering",
+      "file": "mod_001_20260426T171443.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "feat_006",
+      "category": "feature_engineering",
+      "file": "feat_006_20260426T163557.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260409T150955.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "stat_001",
+      "category": "statistical_inference",
+      "file": "stat_001_20260426T164827.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.5
+    },
+    {
+      "task_id": "stat_004",
+      "category": "statistical_inference",
+      "file": "stat_004_20260416T081202.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.75
+    },
+    {
+      "task_id": "model_003",
+      "category": "modeling",
+      "file": "model_003_20260410T125541.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "eda_006",
+      "category": "eda",
+      "file": "eda_006_20260427T024251.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "eda_004",
+      "category": "eda",
+      "file": "eda_004_20260426T024649.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "stat_010",
+      "category": "statistical_inference",
+      "file": "stat_010_20260427T073828.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "model_002",
+      "category": "modeling",
+      "file": "model_002_20260416T093635.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.5
+    },
+    {
+      "task_id": "mod_010",
+      "category": "ml_engineering",
+      "file": "mod_010_20260428T091707.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "mod_002",
+      "category": "ml_engineering",
+      "file": "mod_002_20260427T180232.json",
+      "lexical": {
+        "score": 0.625,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.375
+    },
+    {
+      "task_id": "stat_006",
+      "category": "statistical_inference",
+      "file": "stat_006_20260425T152731.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "model_004",
+      "category": "modeling",
+      "file": "model_004_20260426T183302.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "eda_004",
+      "category": "eda",
+      "file": "eda_004_20260427T023902.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_004",
+      "category": "ml_engineering",
+      "file": "mod_004_20260426T185647.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "stat_002",
+      "category": "statistical_inference",
+      "file": "stat_002_20260426T040025.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_001",
+      "category": "ml_engineering",
+      "file": "mod_001_20260428T072316.json",
+      "lexical": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.5
+    },
+    {
+      "task_id": "stat_010",
+      "category": "statistical_inference",
+      "file": "stat_010_20260428T080459.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "feat_001",
+      "category": "feature_engineering",
+      "file": "feat_001_20260410T071822.json",
+      "lexical": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "stat_010",
+      "category": "statistical_inference",
+      "file": "stat_010_20260428T075614.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "model_003",
+      "category": "modeling",
+      "file": "model_003_20260428T093119.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "mod_002",
+      "category": "ml_engineering",
+      "file": "mod_002_20260428T132459.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "eda_006",
+      "category": "eda",
+      "file": "eda_006_20260428T092801.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "feat_003",
+      "category": "feature_engineering",
+      "file": "feat_003_20260427T175040.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "stat_001",
+      "category": "statistical_inference",
+      "file": "stat_001_20260416T094126.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "stat_010",
+      "category": "statistical_inference",
+      "file": "stat_010_20260428T025216.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_002",
+      "category": "ml_engineering",
+      "file": "mod_002_20260416T093251.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "stat_005",
+      "category": "statistical_inference",
+      "file": "stat_005_20260427T072223.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "feat_010",
+      "category": "feature_engineering",
+      "file": "feat_010_20260427T180025.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "model_002",
+      "category": "modeling",
+      "file": "model_002_20260410T081910.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "stat_010",
+      "category": "statistical_inference",
+      "file": "stat_010_20260428T080438.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "model_010",
+      "category": "modeling",
+      "file": "model_010_20260428T024135.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_004",
+      "category": "ml_engineering",
+      "file": "mod_004_20260417T123441.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "mod_003",
+      "category": "ml_engineering",
+      "file": "mod_003_20260428T095332.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "model_003",
+      "category": "modeling",
+      "file": "model_003_20260426T163308.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "mod_010",
+      "category": "ml_engineering",
+      "file": "mod_010_20260428T054938.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "eda_001",
+      "category": "eda",
+      "file": "eda_001_20260426T085935.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260409T145749.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "stat_009",
+      "category": "statistical_inference",
+      "file": "stat_009_20260426T175000.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_006",
+      "category": "ml_engineering",
+      "file": "mod_006_20260427T182334.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.75
+    },
+    {
+      "task_id": "stat_002",
+      "category": "statistical_inference",
+      "file": "stat_002_20260427T173149.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_006",
+      "category": "ml_engineering",
+      "file": "mod_006_20260428T080312.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "eda_002",
+      "category": "eda",
+      "file": "eda_002_20260426T155638.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "model_005",
+      "category": "modeling",
+      "file": "model_005_20260426T173718.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "eda_003",
+      "category": "eda",
+      "file": "eda_003_20260428T131256.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "eda_003",
+      "category": "eda",
+      "file": "eda_003_20260428T064041.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "eda_001",
+      "category": "eda",
+      "file": "eda_001_20260409T062353.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260410T073204.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "stat_001",
+      "category": "statistical_inference",
+      "file": "stat_001_20260417T122115.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.5
+    },
+    {
+      "task_id": "model_001",
+      "category": "modeling",
+      "file": "model_001_20260416T081943.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "model_005",
+      "category": "modeling",
+      "file": "model_005_20260410T132601.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.5
+    },
+    {
+      "task_id": "stat_005",
+      "category": "statistical_inference",
+      "file": "stat_005_20260426T165145.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "eda_005",
+      "category": "eda",
+      "file": "eda_005_20260425T152025.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "eda_006",
+      "category": "eda",
+      "file": "eda_006_20260427T174542.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "model_003",
+      "category": "modeling",
+      "file": "model_003_20260428T093332.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "feat_010",
+      "category": "feature_engineering",
+      "file": "feat_010_20260428T083831.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "model_003",
+      "category": "modeling",
+      "file": "model_003_20260417T123819.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "model_001",
+      "category": "modeling",
+      "file": "model_001_20260428T092100.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "model_009",
+      "category": "modeling",
+      "file": "model_009_20260428T023959.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "mod_009",
+      "category": "ml_engineering",
+      "file": "mod_009_20260428T022706.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.5
+    },
+    {
+      "task_id": "eda_001",
+      "category": "eda",
+      "file": "eda_001_20260426T165520.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "feat_010",
+      "category": "feature_engineering",
+      "file": "feat_010_20260427T170949.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "model_010",
+      "category": "modeling",
+      "file": "model_010_20260428T024057.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "eda_001",
+      "category": "eda",
+      "file": "eda_001_20260409T151929.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.5
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260426T160527.json",
+      "lexical": {
+        "score": 0.375,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.125
+    },
+    {
+      "task_id": "feat_003",
+      "category": "feature_engineering",
+      "file": "feat_003_20260426T030243.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "eda_001",
+      "category": "eda",
+      "file": "eda_001_20260427T150421.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "eda_006",
+      "category": "eda",
+      "file": "eda_006_20260426T025129.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "model_005",
+      "category": "modeling",
+      "file": "model_005_20260417T084501.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.5
+    },
+    {
+      "task_id": "model_001",
+      "category": "modeling",
+      "file": "model_001_20260410T081505.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "stat_004",
+      "category": "statistical_inference",
+      "file": "stat_004_20260417T122639.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "stat_003",
+      "category": "statistical_inference",
+      "file": "stat_003_20260426T040533.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "model_001",
+      "category": "modeling",
+      "file": "model_001_20260428T023128.json",
+      "lexical": {
+        "score": 0.625,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.375
+    },
+    {
+      "task_id": "eda_003",
+      "category": "eda",
+      "file": "eda_003_20260428T072303.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_005",
+      "category": "ml_engineering",
+      "file": "mod_005_20260410T073534.json",
+      "lexical": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "eda_007",
+      "category": "eda",
+      "file": "eda_007_20260426T170036.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260428T043344.json",
+      "lexical": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "stat_002",
+      "category": "statistical_inference",
+      "file": "stat_002_20260416T092644.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_005",
+      "category": "ml_engineering",
+      "file": "mod_005_20260426T173814.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.5
+    },
+    {
+      "task_id": "eda_003",
+      "category": "eda",
+      "file": "eda_003_20260426T042503.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.5
+    },
+    {
+      "task_id": "feat_006",
+      "category": "feature_engineering",
+      "file": "feat_006_20260427T175530.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "model_006",
+      "category": "modeling",
+      "file": "model_006_20260426T173924.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "mod_006",
+      "category": "ml_engineering",
+      "file": "mod_006_20260426T162330.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "stat_001",
+      "category": "statistical_inference",
+      "file": "stat_001_20260426T174246.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "model_004",
+      "category": "modeling",
+      "file": "model_004_20260428T093634.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "eda_005",
+      "category": "eda",
+      "file": "eda_005_20260427T024113.json",
+      "lexical": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260410T092617.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.75
+    },
+    {
+      "task_id": "feat_005",
+      "category": "feature_engineering",
+      "file": "feat_005_20260427T175359.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.75
+    },
+    {
+      "task_id": "stat_005",
+      "category": "statistical_inference",
+      "file": "stat_005_20260428T123946.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "mod_001",
+      "category": "ml_engineering",
+      "file": "mod_001_20260428T084141.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "feat_002",
+      "category": "feature_engineering",
+      "file": "feat_002_20260428T071258.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "feat_010",
+      "category": "feature_engineering",
+      "file": "feat_010_20260428T080003.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.25
+    },
+    {
+      "task_id": "model_006",
+      "category": "modeling",
+      "file": "model_006_20260428T023826.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.25,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 0
+      },
+      "score_delta": -0.5
+    },
+    {
+      "task_id": "eda_004",
+      "category": "eda",
+      "file": "eda_004_20260428T125725.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "feat_004",
+      "category": "feature_engineering",
+      "file": "feat_004_20260426T030439.json",
+      "lexical": {
+        "score": 0.75,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 0,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "mod_005",
+      "category": "ml_engineering",
+      "file": "mod_005_20260426T172232.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "model_006",
+      "category": "modeling",
+      "file": "model_006_20260426T185322.json",
+      "lexical": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.5,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 0,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    },
+    {
+      "task_id": "mod_009",
+      "category": "ml_engineering",
+      "file": "mod_009_20260428T081821.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 0.75,
+        "reports_uncertainty": 0,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": -0.25
+    },
+    {
+      "task_id": "stat_009",
+      "category": "statistical_inference",
+      "file": "stat_009_20260428T025158.json",
+      "lexical": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "llm_judge": {
+        "score": 1.0,
+        "reports_uncertainty": 1,
+        "uses_appropriate_test": 1,
+        "interprets_correctly": 1,
+        "avoids_p_hacking_signals": 1
+      },
+      "score_delta": 0.0
+    }
+  ]
+}

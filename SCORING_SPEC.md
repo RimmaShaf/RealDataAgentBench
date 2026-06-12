@@ -184,6 +184,61 @@ Answer: *"Applied one-hot encoding to categorical columns. Random forest feature
 
 ---
 
+### Gaming resistance and false negatives — the lexical scorer is a proxy, not the truth
+
+The four checks above detect **statistical *language*, not statistical *validity***. That makes the
+scorer cheap and fully reproducible, but it is gameable and it produces false negatives. The
+examples below are scored by the **actual** `StatValidityScorer` in this repo (run them yourself
+with `scripts/`-style calls or the snippet in §7) — they are not hypothetical.
+
+**Example A — keyword salad games the scorer (modeling):** an answer with zero real statistics
+scores **1.00**.
+
+> *"The results are robust and stable, with accuracy approximately 0.85. We used cross-validation
+> to avoid overfitting so the model generalizes. These findings should be interpreted with caution."*
+
+| Check | Why it fires | Reality |
+|---|---|---|
+| 1 (uncertainty) = 1.0 | "robust"/"stable"/"approximately" + the decimal `0.85` within 200 chars | No CI, SE, or p-value anywhere — `0.85` is a point estimate |
+| 2 (method) = ✓ | "cross-validation", "accuracy" | Named, never actually performed |
+| 3 (interp) = ✓ | "overfitting", "generalizes", "with caution" | Boilerplate caveats, no analysis |
+| 4 (no p-hacking) = ✓ | none of the three p-hacking phrases present | — |
+| **Lexical score** | | **1.00** |
+
+What an LLM judge is *designed* to catch here: its rubric scores `reports_uncertainty = 1` only
+when "p-values, confidence intervals, standard errors, or credible intervals are reported", and
+explicitly `0` for "only point estimates (e.g. 'accuracy is 0.87')". By that rubric this answer
+fails Check 1 — the divergence between the two scorers on exactly this kind of answer is what the
+calibration in **[Scorer validity](README.md#scorer-validity)** is meant to quantify (Cohen's κ and
+Pearson r per category, via `scripts/calibrate_stat_validity.py`).
+
+**Example B — a genuinely rigorous answer is *under*-scored (modeling):** real bootstrap interval,
+real AUC, stratified evaluation — scores only **0.25**.
+
+> *"Bootstrapped 1000 resamples; the AUC point estimate was 0.81 with a 95% interval of 0.74 to
+> 0.88. Because the two classes were imbalanced (12% positive), we held out a stratified test fold
+> and report the gap between fitted and held-out performance."*
+
+| Check | Result | Why it misses |
+|---|---|---|
+| 1 (uncertainty) = 0.0 | ✗ | `\bbootstrap\b` does not match "Bootstrapp**ed**"; "95% **interval**" is not the literal "confidence interval"; the decimals are real but no keyword anchors them |
+| 2 (method) = ✗ | ✗ | "AUC" alone does not match `roc[\s-]*auc`; "stratified test fold" is not in the modeling vocab |
+| 3 (interp) = ✗ | ✗ | "imbalanced" ≠ `class imbalanc`e regex shape; "gap between fitted and held-out" ≠ `train.{0,5}test gap` |
+| 4 (no p-hacking) = ✓ | ✓ | — |
+| **Lexical score** | | **0.25** |
+
+This is the more important failure mode: a model that *does* the right thing but phrases it outside
+the regex vocabulary is penalised. Example A and Example B together bound the problem — the lexical
+scorer can be driven to **1.00 with no statistics** and down to **0.25 with correct statistics**.
+
+**How to read this:** the lexical scorer is a fast pre-filter. Where the per-category calibration κ
+is high (substantial agreement with the judge), the lexical score is trustworthy as-is; where it is
+low — feature engineering is the prime suspect, since the uncertainty-uplift experiment showed its
+gains were "primarily lexical" — the LLM judge should be the primary scorer and the regex only a
+cheap gate. See [Scorer validity](README.md#scorer-validity) and limitation **L4** in §8.
+
+---
+
 ## 5. Composite Score and Weights
 
 ```
@@ -238,7 +293,7 @@ No source code required. Any reviewer can follow these steps:
 | ~~**L1**~~ | ~~Stat Validity~~ | ~~Check 2 vocabulary is EDA-only~~ | ✅ **Fixed in v1.4** — all four checks are now category-aware |
 | **L2** | Efficiency | Token budgets calibrated on Claude Sonnet 4.6, not model-agnostic | 🔴 High priority — planned fix |
 | ~~**L3**~~ | ~~Stat Validity~~ | ~~Check 1 accepts weak hedges ("approximately", "range") as uncertainty~~ | ✅ **Partially fixed in v1.5** — lexical-only matches now score 0.5×; numeric evidence required for full credit |
-| **L4** | Stat Validity | Check 1 numeric-evidence window (200 chars) is loose — any decimal number qualifies, not specifically a CI bound or SE value. Check 3 still detects vocabulary, not reasoning quality. | 🟡 Mitigated by LLM-judge calibration script |
+| **L4** | Stat Validity | The scorer is lexical: it detects statistical *language*, not *validity*. Measured against an LLM judge (n=120, see [README → Scorer validity](README.md#scorer-validity)): overall Pearson r = 0.48, per-category Cohen's κ = 0.18–0.42 — **weak per-answer agreement, no category at κ ≥ 0.7**. It over-credits uncertainty (keyword salad) and under-credits interpretation (synonyms outside the vocab). Category-level *means* track the judge closely (bias −0.065), so aggregate conclusions hold; individual scores are a noisy proxy. | 🔴 Quantified, not yet fixed — use the LLM judge as primary scorer for rigorous per-answer work |
 | **L5** | Stat Validity | Check 4 (p-hacking) has never fired — aspirational guard | 🟡 Retained; patterns tightened in future iterations |
 | **L6** | Correctness | Verbose numeric outputs can pass checks by accidental inclusion | 🟡 Partially mitigated by task design |
 | **L7** | Correctness | No contradiction detection across sentences | 🟠 Known fundamental limit of string scoring |
@@ -257,6 +312,7 @@ No source code required. Any reviewer can follow these steps:
 | 1.3 | 2026-04-18 | Condensed for print readability; promoted L1 and L2 to high priority |
 | **1.4** | **2026-04-25** | **Fixed L1: all four checks now category-aware. Check 3 (interpretation) has per-category signal lists for modeling/feature-engineering/ML engineering/stat-inference. Expanded Check 1 uncertainty vocab (bootstrap, variance, stability, robustness). Added `--temperature` flag for deterministic multi-run mode. 7 new tests.** |
 | **1.5** | **2026-05-10** | **Partially fixed L3: Check 1 now graded (1.0 / 0.5 / 0.0) based on numeric evidence. Keyword + decimal number within 200 chars → 1.0; keyword alone (lexical-only) → 0.5; no match → 0.0. Score impact across 1,356 re-scored traces: −0.001 to −0.034 per model, −0.007 to −0.019 per category. Largest drops: gpt-4o-mini (−0.032), llama (−0.034). Models with no uncertainty vocabulary unchanged (Gemini 2.5 Flash, claude-opus). Also: `scoring/__init__.py` LLMJudgeScorer import made lazy to avoid anthropic SDK timeout on scorer import.** |
+| **1.6** | **2026-06-12** | **Quantified L4 with a published scorer-validity calibration. Ran the lexical scorer vs. an LLM judge (Haiku 4.5, structured rubric) on a stratified sample of 120 answers (24/category): overall Pearson r = 0.48; per-category Cohen's κ = 0.18–0.42 (no category ≥ 0.7). Lexical over-credits uncertainty (58% vs judge 33%) and under-credits interpretation (52% vs judge 67%); category means track closely (bias −0.065). Added per-category κ/r breakdown to `scripts/calibrate_stat_validity.py`, committed `docs/scorer_calibration.json`, added a [Scorer validity](README.md#scorer-validity) section to the README and two worked gaming/false-negative examples to §4. Corrected the script's Haiku cost constant to current pricing ($1/$5 per MTok).** |
 
 ---
 

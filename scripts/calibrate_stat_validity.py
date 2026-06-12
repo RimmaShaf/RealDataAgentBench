@@ -200,10 +200,34 @@ def main() -> None:
             "judge_positive_rate": round(sum(llm_vals) / len(llm_vals), 4),
         }
 
+    # --- Per-category stats (Cohen's kappa + Pearson r by task category) ---
+    # kappa is pooled over all four criteria for the answers in that category;
+    # r is on the continuous total scores.
+    category_stats = {}
+    for cat in sorted(set(r["category"] for r in results)):
+        rows = [r for r in results if r["category"] == cat]
+        lex_s = [r["lexical"]["score"] for r in rows]
+        llm_s = [r["llm_judge"]["score"] for r in rows]
+        lex_bits, llm_bits = [], []
+        for r in rows:
+            for crit in CRITERIA:
+                lex_bits.append(r["lexical"][crit])
+                llm_bits.append(r["llm_judge"][crit])
+        r_cat = pearson(lex_s, llm_s)
+        k_cat = cohen_kappa(lex_bits, llm_bits)
+        category_stats[cat] = {
+            "n": len(rows),
+            "pearson_r": round(r_cat, 4) if not math.isnan(r_cat) else None,
+            "cohen_kappa_pooled": round(k_cat, 4) if not math.isnan(k_cat) else None,
+            "mean_lexical": round(sum(lex_s) / len(lex_s), 4),
+            "mean_judge": round(sum(llm_s) / len(llm_s), 4),
+        }
+
     # Cases with largest disagreement
     disagreements = sorted(results, key=lambda r: abs(r["score_delta"]), reverse=True)[:5]
 
-    est_cost_usd = (total_input_tokens * 0.80 + total_output_tokens * 4.0) / 1_000_000
+    # Claude Haiku 4.5 pricing: $1.00 / 1M input, $5.00 / 1M output (as of 2026-06).
+    est_cost_usd = (total_input_tokens * 1.00 + total_output_tokens * 5.0) / 1_000_000
     mean_lex = sum(lex_scores) / len(lex_scores)
     mean_llm = sum(llm_scores) / len(llm_scores)
 
@@ -219,6 +243,7 @@ def main() -> None:
         "mean_judge_score": round(mean_llm, 4),
         "mean_score_delta_judge_minus_lexical": round(mean_llm - mean_lex, 4),
         "criterion_stats": criterion_stats,
+        "category_stats": category_stats,
         "top_disagreements": [
             {k: v for k, v in d.items() if k != "file"}
             for d in disagreements
@@ -240,6 +265,15 @@ def main() -> None:
         kappa_str = f"{kappa:.3f}" if kappa is not None else "N/A"
         print(f"  {crit:<30}  agree={stats['pct_agreement']:.1%}  κ={kappa_str}  "
               f"lex+={stats['lexical_positive_rate']:.1%}  llm+={stats['judge_positive_rate']:.1%}")
+    print()
+    print("Per-category stats (kappa pooled over criteria, r on total scores):")
+    for cat, st in category_stats.items():
+        kappa = st["cohen_kappa_pooled"]
+        rr = st["pearson_r"]
+        kappa_str = f"{kappa:.3f}" if kappa is not None else "N/A"
+        r_str = f"{rr:.3f}" if rr is not None else "N/A"
+        print(f"  {cat:<24} n={st['n']:<3}  κ={kappa_str}  r={r_str}  "
+              f"lex={st['mean_lexical']:.2f}  llm={st['mean_judge']:.2f}")
     print()
     print(f"Estimated judge cost: ${est_cost_usd:.4f} ({total_input_tokens:,} in, {total_output_tokens:,} out)")
     print()

@@ -33,6 +33,7 @@ outputs/*.json
 !docs/results.json
 !docs/human_baseline.json
 !docs/screenshots/*.json
+!docs/scorer_calibration.json
 
 # Local-only distribution/marketing drafts — kept out of the public repo
 docs/distribution/
