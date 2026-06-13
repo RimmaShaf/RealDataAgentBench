@@ -44,7 +44,7 @@
 | 3 | gpt-4o | 0.851 | 130 | $0.053 | 0.751 | 39/39 ✓ |
 | — | claude-opus-4-6 ⚠️ | 0.846 | 23 | $1.628 | 0.793 | 23/39 |
 | 4 | grok-3-mini | 0.827 | 228 | $0.004 | 0.704 | 39/39 ✓ |
-| — | claude-haiku-4-5 † | 0.801 | 180 | $0.049 | 0.790 | 33/39 ↑ |
+| — | claude-haiku-4-5 † | 0.801 | 180 | $0.197 | 0.790 | 33/39 ↑ |
 | 5 | llama-3.3-70b | 0.798 | 71 | $0.002 | 0.694 | 39/39 ✓ |
 | 6 | gpt-4o-mini | 0.785 | 123 | $0.012 | 0.777 | 39/39 ✓ |
 | — | gpt-5 ⚠️ | 0.780 | 32 | $0.671 | 0.690 | 23/39 |
@@ -387,7 +387,7 @@ realdataagentbench/
 │   ├── task.py           # Pydantic schema — validates every YAML field
 │   └── registry.py       # Discovers, loads, and filters tasks
 ├── datasets/
-│   └── generators/       # 33 seeded synthetic generators + 6 real-data loaders
+│   └── generators/       # 37 synthetic generators (33 clean + 4 messy) + 6 real-data loaders
 ├── harness/
 │   ├── tools.py          # Agent tools in a restricted namespace (run_code, get_dataframe_info, get_column_stats)
 │   ├── tracer.py         # Records every step, tool call, and token count

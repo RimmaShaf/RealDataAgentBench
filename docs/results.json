@@ -75,8 +75,8 @@
       "dab_score_std": 0.1181,
       "ci_lower": 0.7602,
       "ci_upper": 0.8408,
-      "avg_cost_usd": 0.049283,
-      "total_cost_usd": 8.8709,
+      "avg_cost_usd": 0.197132,
+      "total_cost_usd": 35.4836,
       "tasks_run": 33,
       "total_runs": 180
     },
@@ -153,7 +153,7 @@
       "code_quality": 0.7871,
       "efficiency": 0.4089,
       "stat_validity": 0.9062,
-      "avg_cost_usd": 0.01759,
+      "avg_cost_usd": 0.07036,
       "total_tokens": 50823,
       "num_steps": 21,
       "run_at": "2026-04-28T07:07:31.607052+00:00"
@@ -405,7 +405,7 @@
       "code_quality": 0.7329,
       "efficiency": 0.127,
       "stat_validity": 0.7,
-      "avg_cost_usd": 0.061022,
+      "avg_cost_usd": 0.244088,
       "total_tokens": 198234,
       "num_steps": 44,
       "run_at": "2026-04-28T09:20:46.435255+00:00"
@@ -657,7 +657,7 @@
       "code_quality": 0.7295,
       "efficiency": 0.1813,
       "stat_validity": 0.95,
-      "avg_cost_usd": 0.051184,
+      "avg_cost_usd": 0.204736,
       "total_tokens": 150190,
       "num_steps": 37,
       "run_at": "2026-04-28T09:26:27.706001+00:00"
@@ -909,7 +909,7 @@
       "code_quality": 0.8222,
       "efficiency": 1.0,
       "stat_validity": 0.8333,
-      "avg_cost_usd": 0.009884,
+      "avg_cost_usd": 0.039536,
       "total_tokens": 43485,
       "num_steps": 15,
       "run_at": "2026-04-27T15:29:38.295640+00:00"
@@ -1098,7 +1098,7 @@
       "code_quality": 0.873,
       "efficiency": 0.6017,
       "stat_validity": 0.6875,
-      "avg_cost_usd": 0.014218,
+      "avg_cost_usd": 0.056872,
       "total_tokens": 31199,
       "num_steps": 13,
       "run_at": "2026-04-28T04:19:37.354525+00:00"
@@ -1287,7 +1287,7 @@
       "code_quality": 0.7917,
       "efficiency": 0.4084,
       "stat_validity": 1.0,
-      "avg_cost_usd": 0.017197,
+      "avg_cost_usd": 0.068788,
       "total_tokens": 25110,
       "num_steps": 13,
       "run_at": "2026-04-28T09:28:01.439496+00:00"
@@ -1476,7 +1476,7 @@
       "code_quality": 0.8375,
       "efficiency": 0.8683,
       "stat_validity": 1.0,
-      "avg_cost_usd": 0.006493,
+      "avg_cost_usd": 0.025972,
       "total_tokens": 36011,
       "num_steps": 19,
       "run_at": "2026-04-28T09:13:22.992096+00:00"
@@ -1665,7 +1665,7 @@
       "code_quality": 0.6936,
       "efficiency": 0.5286,
       "stat_validity": 0.45,
-      "avg_cost_usd": 0.014159,
+      "avg_cost_usd": 0.056636,
       "total_tokens": 24011,
       "num_steps": 11,
       "run_at": "2026-04-28T04:24:30.367605+00:00"
@@ -1917,7 +1917,7 @@
       "code_quality": 0.6932,
       "efficiency": 0.3705,
       "stat_validity": 0.5417,
-      "avg_cost_usd": 0.046454,
+      "avg_cost_usd": 0.185816,
       "total_tokens": 90082,
       "num_steps": 23,
       "run_at": "2026-04-28T04:28:46.942447+00:00"
@@ -2169,7 +2169,7 @@
       "code_quality": 0.7693,
       "efficiency": 0.6747,
       "stat_validity": 0.5,
-      "avg_cost_usd": 0.02628,
+      "avg_cost_usd": 0.10512,
       "total_tokens": 51686,
       "num_steps": 21,
       "run_at": "2026-04-28T04:30:28.216389+00:00"
@@ -2421,7 +2421,7 @@
       "code_quality": 0.6294,
       "efficiency": 0.2419,
       "stat_validity": 0.875,
-      "avg_cost_usd": 0.08468,
+      "avg_cost_usd": 0.33872,
       "total_tokens": 138203,
       "num_steps": 31,
       "run_at": "2026-04-28T07:29:21.477677+00:00"
@@ -2673,7 +2673,7 @@
       "code_quality": 0.7144,
       "efficiency": 0.305,
       "stat_validity": 0.8,
-      "avg_cost_usd": 0.100745,
+      "avg_cost_usd": 0.40298,
       "total_tokens": 225250,
       "num_steps": 31,
       "run_at": "2026-04-28T04:39:24.491072+00:00"
@@ -2925,7 +2925,7 @@
       "code_quality": 0.6847,
       "efficiency": 0.8738,
       "stat_validity": 0.625,
-      "avg_cost_usd": 0.014905,
+      "avg_cost_usd": 0.05962,
       "total_tokens": 37190,
       "num_steps": 15,
       "run_at": "2026-04-28T04:40:59.825185+00:00"
@@ -3114,7 +3114,7 @@
       "code_quality": 0.7152,
       "efficiency": 0.465,
       "stat_validity": 0.5455,
-      "avg_cost_usd": 0.021899,
+      "avg_cost_usd": 0.087596,
       "total_tokens": 92848,
       "num_steps": 27,
       "run_at": "2026-04-28T09:31:29.906036+00:00"
@@ -3303,7 +3303,7 @@
       "code_quality": 0.8443,
       "efficiency": 0.2893,
       "stat_validity": 0.75,
-      "avg_cost_usd": 0.042416,
+      "avg_cost_usd": 0.169664,
       "total_tokens": 96907,
       "num_steps": 29,
       "run_at": "2026-04-28T09:35:05.972548+00:00"
@@ -3492,7 +3492,7 @@
       "code_quality": 0.7799,
       "efficiency": 0.4847,
       "stat_validity": 0.5625,
-      "avg_cost_usd": 0.014259,
+      "avg_cost_usd": 0.057036,
       "total_tokens": 30294,
       "num_steps": 15,
       "run_at": "2026-04-28T07:41:28.118753+00:00"
@@ -3744,7 +3744,7 @@
       "code_quality": 0.6327,
       "efficiency": 0.1122,
       "stat_validity": 0.4167,
-      "avg_cost_usd": 0.055673,
+      "avg_cost_usd": 0.222692,
       "total_tokens": 219405,
       "num_steps": 33,
       "run_at": "2026-04-28T09:42:53.681178+00:00"
@@ -3996,7 +3996,7 @@
       "code_quality": 0.5862,
       "efficiency": 0.1547,
       "stat_validity": 1.0,
-      "avg_cost_usd": 0.113412,
+      "avg_cost_usd": 0.453648,
       "total_tokens": 399886,
       "num_steps": 59,
       "run_at": "2026-04-28T09:53:32.934713+00:00"
@@ -4248,7 +4248,7 @@
       "code_quality": 0.6861,
       "efficiency": 0.6366,
       "stat_validity": 0.5,
-      "avg_cost_usd": 0.029304,
+      "avg_cost_usd": 0.117216,
       "total_tokens": 103528,
       "num_steps": 27,
       "run_at": "2026-04-28T05:22:27.476338+00:00"
@@ -4500,7 +4500,7 @@
       "code_quality": 0.6916,
       "efficiency": 0.4705,
       "stat_validity": 1.0,
-      "avg_cost_usd": 0.031442,
+      "avg_cost_usd": 0.125768,
       "total_tokens": 138660,
       "num_steps": 38,
       "run_at": "2026-04-28T05:26:23.948153+00:00"
@@ -4752,7 +4752,7 @@
       "code_quality": 0.665,
       "efficiency": 0.1587,
       "stat_validity": 0.9167,
-      "avg_cost_usd": 0.084255,
+      "avg_cost_usd": 0.33702,
       "total_tokens": 340350,
       "num_steps": 36,
       "run_at": "2026-04-28T12:21:47.020213+00:00"
@@ -4941,7 +4941,7 @@
       "code_quality": 0.6995,
       "efficiency": 0.1451,
       "stat_validity": 0.9286,
-      "avg_cost_usd": 0.073496,
+      "avg_cost_usd": 0.293984,
       "total_tokens": 277277,
       "num_steps": 45,
       "run_at": "2026-04-28T12:31:50.088112+00:00"
@@ -5130,7 +5130,7 @@
       "code_quality": 0.612,
       "efficiency": 0.1742,
       "stat_validity": 0.9167,
-      "avg_cost_usd": 0.064141,
+      "avg_cost_usd": 0.256564,
       "total_tokens": 149503,
       "num_steps": 27,
       "run_at": "2026-04-28T12:41:16.447183+00:00"
@@ -5319,7 +5319,7 @@
       "code_quality": 0.6476,
       "efficiency": 0.6,
       "stat_validity": 0.5833,
-      "avg_cost_usd": 0.012809,
+      "avg_cost_usd": 0.051236,
       "total_tokens": 41933,
       "num_steps": 17,
       "run_at": "2026-04-28T05:58:33.521555+00:00"
@@ -5571,7 +5571,7 @@
       "code_quality": 0.6334,
       "efficiency": 0.1452,
       "stat_validity": 0.8214,
-      "avg_cost_usd": 0.082404,
+      "avg_cost_usd": 0.329616,
       "total_tokens": 248302,
       "num_steps": 47,
       "run_at": "2026-04-28T08:36:21.135128+00:00"
@@ -5823,7 +5823,7 @@
       "code_quality": 0.721,
       "efficiency": 0.9103,
       "stat_validity": 0.5,
-      "avg_cost_usd": 0.019564,
+      "avg_cost_usd": 0.078256,
       "total_tokens": 52425,
       "num_steps": 19,
       "run_at": "2026-04-28T06:08:23.893670+00:00"
@@ -6075,7 +6075,7 @@
       "code_quality": 0.6585,
       "efficiency": 0.2913,
       "stat_validity": 1.0,
-      "avg_cost_usd": 0.080972,
+      "avg_cost_usd": 0.323888,
       "total_tokens": 219143,
       "num_steps": 39,
       "run_at": "2026-04-28T08:39:20.329401+00:00"
@@ -6327,7 +6327,7 @@
       "code_quality": 0.7368,
       "efficiency": 0.1975,
       "stat_validity": 0.75,
-      "avg_cost_usd": 0.077513,
+      "avg_cost_usd": 0.310052,
       "total_tokens": 248016,
       "num_steps": 41,
       "run_at": "2026-04-18T02:40:24.657930+00:00"
@@ -7083,7 +7083,7 @@
       "code_quality": 0.7818,
       "efficiency": 0.175,
       "stat_validity": 1.0,
-      "avg_cost_usd": 0.035213,
+      "avg_cost_usd": 0.140852,
       "total_tokens": 98745,
       "num_steps": 25,
       "run_at": "2026-04-18T02:41:33.880214+00:00"
@@ -7335,7 +7335,7 @@
       "code_quality": 0.775,
       "efficiency": 1.0,
       "stat_validity": 1.0,
-      "avg_cost_usd": 0.017751,
+      "avg_cost_usd": 0.071004,
       "total_tokens": 47188,
       "num_steps": 19,
       "run_at": "2026-04-18T02:42:10.849747+00:00"
@@ -7587,7 +7587,7 @@
       "code_quality": 0.68,
       "efficiency": 0.4,
       "stat_validity": 1.0,
-      "avg_cost_usd": 0.02777,
+      "avg_cost_usd": 0.11108,
       "total_tokens": 77482,
       "num_steps": 23,
       "run_at": "2026-04-18T02:43:05.532491+00:00"
@@ -7839,7 +7839,7 @@
       "code_quality": 0.8364,
       "efficiency": 0.6483,
       "stat_validity": 1.0,
-      "avg_cost_usd": 0.030313,
+      "avg_cost_usd": 0.121252,
       "total_tokens": 79312,
       "num_steps": 25,
       "run_at": "2026-04-18T02:44:11.069171+00:00"
@@ -8091,7 +8091,7 @@
       "code_quality": 0.8154,
       "efficiency": 0.4,
       "stat_validity": 1.0,
-      "avg_cost_usd": 0.034071,
+      "avg_cost_usd": 0.136284,
       "total_tokens": 99843,
       "num_steps": 29,
       "run_at": "2026-04-18T02:45:06.363182+00:00"

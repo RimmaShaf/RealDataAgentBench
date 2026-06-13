@@ -21,13 +21,14 @@ Versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `.env.example` — template for API key configuration
 
 ### Fixed
-- **`claude-haiku-4-5` price corrected** in `harness/pricing.py` from `(0.25, 1.25)` to the current `(1.00, 5.00)` per MTok. Affects only *future* cost computations — the leaderboard's displayed costs are baked into `docs/results.json` and unchanged until re-aggregated.
+- **`claude-haiku-4-5` price corrected** in `harness/pricing.py` from `(0.25, 1.25)` to the current `(1.00, 5.00)` per MTok. Because both rates scaled by exactly 4×, the leaderboard's displayed haiku cost was recomputed precisely: avg $0.0493 → $0.1971/task, total $8.87 → $35.48 (in `docs/results.json`, README, and the embedded `index.html` data). **Cost only — RDAB scores are unchanged**; haiku is unranked (33/39 coverage).
 - **Correctness scorer thousands-separator bug (L10)** — the numeric matcher now strips digit-grouping commas, so a correct `$90,383.21` matches the target `90383.21` (previously scored 0). List separators (`0.20, 0.25`) left intact. Verified to change 0 of 1,356 existing leaderboard traces — published numbers unaffected. +2 regression tests.
 - `max_tokens` → `max_completion_tokens` in `OpenAIProvider` — required by GPT-5 and Gemini 2.5 Flash (reasoning models)
 - Gemini alias updated from deprecated `gemini-2.0-flash` to `gemini-2.5-flash`
 - `gemini-pro` alias updated from `gemini-1.5-pro` to `gemini-2.5-pro`
 
 ### Changed
+- **`scripts/sync_inline_leaderboard.py`** — regenerates the embedded `INLINE_SUMMARY` / `INLINE_RUNS` arrays in `docs/index.html` from canonical `docs/results.json` (with a `--check` mode for CI), replacing the previous hand-maintained "keep in sync" comments and the drift they invited.
 - `.gitignore` — raw `outputs/*.json` files removed from git tracking; only `docs/results.json` is kept
 - Cost table in `build_leaderboard.py` now imports from `harness/pricing.py` (no more duplication)
 
