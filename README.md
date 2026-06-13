@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions"><img src="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/tests-188%20passing-brightgreen" alt="Tests"></a>
+  <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/tests-190%20passing-brightgreen" alt="Tests"></a>
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-blue" alt="Python"></a>
   <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"></a>
   <a href="https://patibandlavenkatamanideep.github.io/RealDataAgentBench/"><img src="https://img.shields.io/badge/leaderboard-live-brightgreen" alt="Leaderboard"></a>
@@ -345,7 +345,7 @@ Key result at [top](#uncertainty-prompting-experiment--headline-result). Per-mod
 ## Why RDAB is Credible
 
 - **Every score is independently reproducible.** [SCORING_SPEC.md](SCORING_SPEC.md) documents every formula, regex, threshold, and known limitation — no source code reading required.
-- **Known limitations are disclosed — for all four scorers, not just one.** The stat-validity scorer is lexical; `scripts/calibrate_stat_validity.py` quantifies its gap vs. an LLM judge (Pearson r, Cohen's κ — see [Scorer validity](#scorer-validity)). The Correctness and Code-Quality scorers are audited to the same bar in [SCORING_SPEC.md §1–§2](SCORING_SPEC.md#1-correctness--range-0010), each with a worked example showing how it can be gamed or produce a false negative (e.g. correct `$90,383.21` scoring 0; crashing code scoring 1.0). Nothing is presented as more rigorous than it is.
+- **Known limitations are disclosed — for all four scorers, not just one.** The stat-validity scorer is lexical; `scripts/calibrate_stat_validity.py` quantifies its gap vs. an LLM judge (Pearson r, Cohen's κ — see [Scorer validity](#scorer-validity)). The Correctness and Code-Quality scorers are audited to the same bar in [SCORING_SPEC.md §1–§2](SCORING_SPEC.md#1-correctness--range-0010), each with a worked example showing how it can be gamed or produce a false negative (e.g. a number-spray scoring 1.0; crashing code scoring 1.0). The one outright bug that audit surfaced — a correct `$90,383.21` scoring 0 — was fixed (v1.8) and verified to change 0 of 1,356 existing traces. Nothing is presented as more rigorous than it is.
 - **Partial-coverage models are excluded from ranking.** Any model below 80% task coverage is flagged and unranked. Their scores are not averaged against different task sets.
 - **Data provenance is disclosed, including its weaknesses.** Six tasks use publicly licensed real datasets (UCI Breast Cancer, Iris, Diabetes, Wine) — but those are famous, memorisable toy sets, stated plainly in [Data provenance & contamination](#data-provenance--contamination). Four newer messy-synthetic tasks add seeded, non-memorisable real-world dirt (duplicates, text-encoded numerics, MNAR nulls, target leakage) where the cleaning is the task.
 - **The key experiment is pre-registered.** Outcome interpretations committed before any runs were executed. Results reported against those pre-committed criteria without post-hoc adjustment.
@@ -423,7 +423,7 @@ docs/
 
 ## Roadmap
 
-- **Done:** Task schema and harness (188 tests), 43 tasks (39 scored on the leaderboard + 4 newly-added messy-data tasks), 12 models with live leaderboard, per-run cost tracking, category-aware scorer, 6 real-data tasks, published scorer-validity calibration (lexical vs LLM judge, per-category κ/r), subprocess-isolated code execution, multi-run CI; free models + gpt-4.1 family at full 39-task CI; two-model uncertainty-uplift experiment (GPT-4.1 complete, Llama partial — model-dependent effect confirmed); stat_validity v1.5 patch (numeric-evidence check, partial credit for lexical-only matches; −0.001 to −0.034 per model across 1,356 traces)
+- **Done:** Task schema and harness (190 tests), 43 tasks (39 scored on the leaderboard + 4 newly-added messy-data tasks), 12 models with live leaderboard, per-run cost tracking, category-aware scorer, 6 real-data tasks, published scorer-validity calibration (lexical vs LLM judge, per-category κ/r), subprocess-isolated code execution, multi-run CI; free models + gpt-4.1 family at full 39-task CI; two-model uncertainty-uplift experiment (GPT-4.1 complete, Llama partial — model-dependent effect confirmed); stat_validity v1.5 patch (numeric-evidence check, partial credit for lexical-only matches; −0.001 to −0.034 per model across 1,356 traces)
 - **In progress:** claude-haiku 39-task CI (33/39 → 39/39); calibration κ between lexical scorer and LLM judge (v1.5 re-run pending); Llama feat_002/model_003 V1 runs (pending daily TPD reset)
 - **Done (integration):** Tether + CostGuard `/replay` — production traces captured via Tether feed directly into CostGuard for RDAB-grounded cost-vs-quality comparison with 95% bootstrap CI
 - **Next:** NLP, visualization, and time-series task categories; arXiv paper

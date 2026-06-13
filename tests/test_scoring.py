@@ -74,6 +74,18 @@ class TestCorrectnessScorer:
         score = self.scorer.score(answer, task.ground_truth)
         assert score >= 0.6
 
+    def test_thousands_separator_does_not_break_numeric_match(self):
+        # L10 fix: a correct value written with thousands separators must match.
+        gt = {"total": 90383.21, "total_approx": 90383.21, "total_tolerance": 350}
+        assert self.scorer.score("The total revenue is $90,383.21.", gt) == 1.0
+        assert self.scorer.score("The total revenue is 90383.21.", gt) == 1.0
+
+    def test_list_separator_commas_are_not_merged(self):
+        # A comma + space (list separator) must NOT merge two numbers into one.
+        gt = {"rate": 0.20, "rate_approx": 0.20, "rate_tolerance": 0.005}
+        # "0.20, 0.25" must still expose 0.20 as its own number (0.2025 would miss).
+        assert self.scorer.score("candidate rates: 0.20, 0.25", gt) == 1.0
+
 
 # ---------------------------------------------------------------------------
 # Code Quality

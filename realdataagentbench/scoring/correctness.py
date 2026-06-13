@@ -73,8 +73,15 @@ class CorrectnessScorer:
 
         return None
 
+    # Thousands separators (a comma directly between two digits) would otherwise
+    # split a number like "90,383.21" into "90" and "383.21". Strip only those
+    # commas — a comma followed by a space (a list separator, e.g. "0.20, 0.25")
+    # is left intact.
+    _THOUSANDS_SEP_RE = re.compile(r"(?<=\d),(?=\d)")
+
     def _numeric_in_answer(self, answer_lower: str, target: float, tolerance: float) -> bool:
         """Find any float in answer within tolerance of target."""
+        answer_lower = self._THOUSANDS_SEP_RE.sub("", answer_lower)
         pattern = r"[-+]?\d+\.?\d*"
         for match in re.finditer(pattern, answer_lower):
             try:

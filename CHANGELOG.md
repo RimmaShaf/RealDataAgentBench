@@ -20,6 +20,7 @@ Versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `.env.example` — template for API key configuration
 
 ### Fixed
+- **Correctness scorer thousands-separator bug (L10)** — the numeric matcher now strips digit-grouping commas, so a correct `$90,383.21` matches the target `90383.21` (previously scored 0). List separators (`0.20, 0.25`) left intact. Verified to change 0 of 1,356 existing leaderboard traces — published numbers unaffected. +2 regression tests.
 - `max_tokens` → `max_completion_tokens` in `OpenAIProvider` — required by GPT-5 and Gemini 2.5 Flash (reasoning models)
 - Gemini alias updated from deprecated `gemini-2.0-flash` to `gemini-2.5-flash`
 - `gemini-pro` alias updated from `gemini-1.5-pro` to `gemini-2.5-pro`
