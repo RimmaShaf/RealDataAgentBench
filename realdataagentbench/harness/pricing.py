@@ -1,22 +1,34 @@
 """Token pricing — single source of truth for all model costs.
 
 Prices are USD per 1 million tokens (input / output).
-Source: official pricing pages as of April 2026.
 
-Both ``harness/providers.py`` and ``scripts/build_leaderboard.py`` import
-from here so the numbers never drift out of sync.
+``PRICING_AS_OF`` records when these numbers were last verified against official
+pricing pages. Provider prices change often, so ``tests/test_pricing.py`` fails
+the build once this table is older than ``MAX_PRICING_AGE_DAYS``, forcing a
+periodic review. The date is surfaced on the leaderboard via ``build_leaderboard``.
+
+Both ``harness/providers.py`` and ``scripts/build_leaderboard.py`` import from
+here so the numbers never drift out of sync.
 """
 
 from __future__ import annotations
+
+from datetime import date
+
+# Last time the prices below were checked against official pricing pages (YYYY-MM-DD).
+# Bump this whenever you review/update the table — the CI staleness check keys off it.
+PRICING_AS_OF = "2026-06-13"
+# CI fails if the table is older than this (forces a roughly quarterly price review).
+MAX_PRICING_AGE_DAYS = 90
 
 # (input_$/M, output_$/M)
 COST_PER_M_TOKENS: dict[str, tuple[float, float]] = {
     # ── Anthropic ─────────────────────────────────────────────────────────────
     "claude-sonnet-4-6":         (3.00,  15.00),
     "claude-opus-4-6":           (15.00, 75.00),
-    "claude-haiku-4-5-20251001": (0.25,   1.25),
+    "claude-haiku-4-5-20251001": (1.00,   5.00),
     # short aliases kept for backwards-compat with old output files
-    "haiku":                     (0.25,   1.25),
+    "haiku":                     (1.00,   5.00),
     # ── OpenAI ────────────────────────────────────────────────────────────────
     "gpt-5":                     (15.00, 60.00),
     "gpt-5-mini":                (1.10,   4.40),
@@ -60,3 +72,15 @@ def compute_cost(model: str, input_tokens: int, output_tokens: int) -> float:
         + (output_tokens / 1_000_000) * out_per_m,
         6,
     )
+
+
+def pricing_age_days(today: date | None = None) -> int:
+    """Days since the pricing table was last verified (see ``PRICING_AS_OF``)."""
+    today = today or date.today()
+    as_of = date.fromisoformat(PRICING_AS_OF)
+    return (today - as_of).days
+
+
+def pricing_is_stale(today: date | None = None) -> bool:
+    """True if the pricing table is older than ``MAX_PRICING_AGE_DAYS``."""
+    return pricing_age_days(today) > MAX_PRICING_AGE_DAYS

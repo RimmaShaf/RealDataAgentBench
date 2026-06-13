@@ -9,6 +9,7 @@ Versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- **Pricing staleness gate** — `PRICING_AS_OF` + `MAX_PRICING_AGE_DAYS` in `harness/pricing.py`, with `tests/test_pricing.py` failing the build once the table is >90 days old (forces a periodic price review). The date is emitted into `docs/results.json` by `build_leaderboard.py` and surfaced as a "Pricing as of …" pill on the leaderboard. +6 tests.
 - **4 messy-synthetic tasks** (`eda_011`, `feat_011`, `stat_011`, `mod_011`) — seeded generators that inject real-world data dirt (duplicate rows, text-encoded numerics, inconsistent categorical labels, MNAR missingness, target leakage) where the cleaning *is* the task. Not memorisable and not clean, unlike the 6 toy "real" datasets. Generators: `messy_customer_orders`, `messy_sensor_data`, `messy_survey`, `messy_loan_applications`. +17 tests.
 - **Data provenance & contamination** README section — synthetic / real / messy breakdown with memorisation-risk accounting; owns the toy-dataset weakness.
 - **Scorer-validity calibration** published — lexical scorer vs LLM judge (Haiku 4.5), per-category Cohen's κ and Pearson r, committed `docs/scorer_calibration.json` + README "Scorer validity" section.
@@ -20,6 +21,7 @@ Versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 - `.env.example` — template for API key configuration
 
 ### Fixed
+- **`claude-haiku-4-5` price corrected** in `harness/pricing.py` from `(0.25, 1.25)` to the current `(1.00, 5.00)` per MTok. Affects only *future* cost computations — the leaderboard's displayed costs are baked into `docs/results.json` and unchanged until re-aggregated.
 - **Correctness scorer thousands-separator bug (L10)** — the numeric matcher now strips digit-grouping commas, so a correct `$90,383.21` matches the target `90383.21` (previously scored 0). List separators (`0.20, 0.25`) left intact. Verified to change 0 of 1,356 existing leaderboard traces — published numbers unaffected. +2 regression tests.
 - `max_tokens` → `max_completion_tokens` in `OpenAIProvider` — required by GPT-5 and Gemini 2.5 Flash (reasoning models)
 - Gemini alias updated from deprecated `gemini-2.0-flash` to `gemini-2.5-flash`

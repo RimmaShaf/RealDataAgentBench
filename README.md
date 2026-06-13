@@ -8,7 +8,7 @@
 
 <p align="center">
   <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions"><img src="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/tests-190%20passing-brightgreen" alt="Tests"></a>
+  <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/tests-196%20passing-brightgreen" alt="Tests"></a>
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-blue" alt="Python"></a>
   <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"></a>
   <a href="https://patibandlavenkatamanideep.github.io/RealDataAgentBench/"><img src="https://img.shields.io/badge/leaderboard-live-brightgreen" alt="Leaderboard"></a>
@@ -423,7 +423,7 @@ docs/
 
 ## Roadmap
 
-- **Done:** Task schema and harness (190 tests), 43 tasks (39 scored on the leaderboard + 4 newly-added messy-data tasks), 12 models with live leaderboard, per-run cost tracking, category-aware scorer, 6 real-data tasks, published scorer-validity calibration (lexical vs LLM judge, per-category κ/r), subprocess-isolated code execution, multi-run CI; free models + gpt-4.1 family at full 39-task CI; two-model uncertainty-uplift experiment (GPT-4.1 complete, Llama partial — model-dependent effect confirmed); stat_validity v1.5 patch (numeric-evidence check, partial credit for lexical-only matches; −0.001 to −0.034 per model across 1,356 traces)
+- **Done:** Task schema and harness (196 tests), 43 tasks (39 scored on the leaderboard + 4 newly-added messy-data tasks), 12 models with live leaderboard, per-run cost tracking, category-aware scorer, 6 real-data tasks, published scorer-validity calibration (lexical vs LLM judge, per-category κ/r), subprocess-isolated code execution, multi-run CI; free models + gpt-4.1 family at full 39-task CI; two-model uncertainty-uplift experiment (GPT-4.1 complete, Llama partial — model-dependent effect confirmed); stat_validity v1.5 patch (numeric-evidence check, partial credit for lexical-only matches; −0.001 to −0.034 per model across 1,356 traces)
 - **In progress:** claude-haiku 39-task CI (33/39 → 39/39); calibration κ between lexical scorer and LLM judge (v1.5 re-run pending); Llama feat_002/model_003 V1 runs (pending daily TPD reset)
 - **Done (integration):** Tether + CostGuard `/replay` — production traces captured via Tether feed directly into CostGuard for RDAB-grounded cost-vs-quality comparison with 95% bootstrap CI
 - **Next:** NLP, visualization, and time-series task categories; arXiv paper

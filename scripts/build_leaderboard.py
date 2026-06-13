@@ -17,7 +17,7 @@ ROOT = Path(__file__).parent.parent
 sys.path.insert(0, str(ROOT))
 
 from realdataagentbench.core.registry import TaskRegistry
-from realdataagentbench.harness.pricing import compute_cost
+from realdataagentbench.harness.pricing import PRICING_AS_OF, compute_cost
 from realdataagentbench.harness.providers import resolve_model
 from realdataagentbench.scoring.composite import CompositeScorer
 
@@ -164,6 +164,7 @@ def build(
 
     output = {
         "generated_at": datetime.now(timezone.utc).isoformat(),
+        "pricing_as_of": PRICING_AS_OF,
         "total_runs": sum(len(v) for v in all_runs.values()),
         "model_summary": summaries,
         "runs": task_rows,
