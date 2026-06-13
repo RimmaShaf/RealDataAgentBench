@@ -1,0 +1,84 @@
+task_id: eda_011
+title: "Data-Quality Audit of a Dirty Orders Export"
+difficulty: medium
+category: eda
+description: |
+  You are given a RAW customer-orders export with real-world data-quality issues —
+  it has NOT been cleaned. Inspect and clean it before answering. Report:
+
+  1. The number of exact duplicate rows in the raw data (full-row duplicates).
+  2. Total revenue. The `amount` column is stored as TEXT in inconsistent formats
+     (e.g. "$1,234.50", " 1,000 USD", "45.00", or blank for missing). Parse it to a
+     number, then sum after (a) removing exact duplicate rows and (b) dropping rows
+     with a missing amount. Report the total to 2 decimal places.
+  3. The `region` column uses inconsistent labels for the same place (e.g. "NY",
+     "new york", " New York ", "new-york"). State how many TRUE (canonical) regions
+     the data actually represents after standardizing the labels.
+  4. List the data-quality issues you found (duplicates, text-encoded numbers,
+     inconsistent categories, missing values, whitespace).
+
+  Report exact numeric values. Do not answer from the raw frame without cleaning.
+
+dataset:
+  generator: messy_customer_orders
+  seed: 42
+  n_rows: 600
+  schema:
+    order_id: int
+    region: str
+    amount: str
+    customer_email: str
+  injected_issues:
+    - duplicate_rows
+    - text_encoded_numeric
+    - inconsistent_categoricals
+    - missing_values
+    - whitespace
+
+ground_truth:
+  duplicate_rows: 40
+  duplicate_rows_approx: 40
+  duplicate_rows_tolerance: 0
+  canonical_regions: 5
+  canonical_regions_approx: 5
+  canonical_regions_tolerance: 0
+  total_revenue: 90383.21
+  total_revenue_approx: 90383.21
+  total_revenue_tolerance: 350
+  amount_stored_as_text: true
+  amount_stored_as_text_aliases:
+    - "stored as text"
+    - "stored as string"
+    - "as a string"
+    - "currency string"
+    - "dollar sign"
+    - "object dtype"
+    - "not numeric"
+    - "needs parsing"
+  region_labels_inconsistent: true
+  region_labels_inconsistent_aliases:
+    - "inconsistent"
+    - "not standardized"
+    - "unstandardized"
+    - "abbreviation"
+    - "whitespace"
+    - "case"
+    - "canonical"
+    - "same region"
+
+scoring:
+  correctness_weight: 0.50
+  code_quality_weight: 0.20
+  efficiency_weight: 0.15
+  stat_validity_weight: 0.15
+
+evaluation:
+  max_steps: 24
+  timeout_seconds: 150
+  allowed_tools:
+    - run_code
+
+tags:
+  - messy
+  - real_world
+  - data_cleaning

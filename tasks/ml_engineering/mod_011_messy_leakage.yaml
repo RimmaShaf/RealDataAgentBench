@@ -1,0 +1,87 @@
+task_id: mod_011
+title: "Data-Quality and Leakage Gate Before Modeling Loan Defaults"
+difficulty: hard
+category: ml_engineering
+description: |
+  You are given RAW loan-application data and asked to assess whether it is ready to
+  train a default-prediction model. Do NOT just fit a model and report a high score —
+  audit the data first. Report:
+
+  1. The number of exact duplicate rows (duplicated applications). Explain why these
+     must be removed BEFORE any train/test split (otherwise the same record leaks
+     across the split and inflates the score).
+  2. The overall default rate after de-duplication.
+  3. Identify any feature that causes TARGET LEAKAGE — a column that is essentially a
+     function of the target `default` and would not be available at prediction time.
+     Name the column and give the evidence (e.g. its correlation with the target, or
+     that a model using it alone reaches an AUC of ~1.0).
+  4. The `employment` column has inconsistent labels that collapse to two true states —
+     note this.
+
+  Report exact values and name the leaky column explicitly.
+
+dataset:
+  generator: messy_loan_applications
+  seed: 42
+  n_rows: 600
+  schema:
+    app_id: int
+    income: float
+    loan_amount: float
+    employment: str
+    internal_score: float
+    default: int
+  injected_issues:
+    - duplicate_records
+    - target_leakage
+    - inconsistent_categoricals
+    - missing_values
+
+ground_truth:
+  duplicate_rows: 45
+  duplicate_rows_approx: 45
+  duplicate_rows_tolerance: 0
+  default_rate: 0.22
+  default_rate_approx: 0.22
+  default_rate_tolerance: 0.02
+  leaky_feature: "internal_score"
+  leaky_feature_aliases:
+    - "internal score"
+  leakage_identified: true
+  leakage_identified_aliases:
+    - "leakage"
+    - "leak"
+    - "perfect predictor"
+    - "auc of 1"
+    - "auc = 1"
+    - "auc ~1"
+    - "1.0"
+    - "target leak"
+    - "not available at prediction"
+  employment_inconsistent: true
+  employment_inconsistent_aliases:
+    - "inconsistent"
+    - "full-time"
+    - "two states"
+    - "two categories"
+    - "collapse"
+    - "standardize"
+    - "canonical"
+
+scoring:
+  correctness_weight: 0.45
+  code_quality_weight: 0.20
+  efficiency_weight: 0.15
+  stat_validity_weight: 0.20
+
+evaluation:
+  max_steps: 28
+  timeout_seconds: 180
+  allowed_tools:
+    - run_code
+
+tags:
+  - messy
+  - real_world
+  - data_cleaning
+  - leakage

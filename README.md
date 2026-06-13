@@ -8,12 +8,12 @@
 
 <p align="center">
   <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions"><img src="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions/workflows/ci.yml/badge.svg" alt="CI"></a>
-  <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/tests-168%20passing-brightgreen" alt="Tests"></a>
+  <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/actions/workflows/ci.yml"><img src="https://img.shields.io/badge/tests-188%20passing-brightgreen" alt="Tests"></a>
   <a href="https://www.python.org/"><img src="https://img.shields.io/badge/python-3.10%2B-blue" alt="Python"></a>
   <a href="https://github.com/patibandlavenkatamanideep/RealDataAgentBench/blob/main/LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue" alt="License"></a>
   <a href="https://patibandlavenkatamanideep.github.io/RealDataAgentBench/"><img src="https://img.shields.io/badge/leaderboard-live-brightgreen" alt="Leaderboard"></a>
   <a href="SCORING_SPEC.md"><img src="https://img.shields.io/badge/scoring-fully%20transparent-blue" alt="Scoring spec"></a>
-  <a href="tasks/"><img src="https://img.shields.io/badge/tasks-39%20(6%20real%20data)-orange" alt="Tasks"></a>
+  <a href="tasks/"><img src="https://img.shields.io/badge/tasks-43%20(6%20real%20·%204%20messy)-orange" alt="Tasks"></a>
 </p>
 
 > **Frontier models score 0.84–0.99 on correctness.** Statistical validity ranges from 0.52 (feature engineering) to 0.90 (statistical inference). Models know when statistical language is expected — not when it's warranted. The gap is largest where it's least visible.
@@ -22,7 +22,7 @@
 
 ## TL;DR
 
-- **12 models · 39 tasks · 4-dimensional scoring** — correctness alone misses where agents fail in production data workflows
+- **12 models · 39 scored tasks (43 in the suite) · 4-dimensional scoring** — correctness alone misses where agents fail in production data workflows
 - **gpt-4.1 leads at 0.875** — statistically tied with gpt-4.1-mini (0.870) at 65× higher cost per task; gpt-4.1-mini is the dominant cost-performance choice
 - **A free model (Llama 3.3-70b, 0.798) scores higher than GPT-5 (0.780)** — Llama at 39/39 tasks with multi-run CI; GPT-5 covered only 23/39 tasks single-run (cost-prohibitive to scale), so treat this as directional, not a head-to-head match
 - **Statistical validity is the differentiating dimension:** Claude leads on validity (Sonnet 0.851), GPT leads on correctness (gpt-4.1-mini 0.931) — the two correlate at r = 0.43, confirming they capture orthogonal capabilities
@@ -178,7 +178,7 @@ dab run --all --model gpt-4.1 --runs 3 --temperature 0
 ```
 
 ```bash
-dab list                          # browse all 39 tasks
+dab list                          # browse all 43 tasks
 dab score outputs/<file>.json     # re-score any saved trace
 dab models                        # check supported models + API key status
 ```
@@ -235,14 +235,18 @@ The Stat-Validity scorer is **lexical** — it detects statistical *language* vi
 
 ## Tasks
 
-39 tasks across 5 categories: EDA (7), Feature Engineering (8), Modeling (8), Statistical Inference (8), ML Engineering (8). 6 use real UCI/sklearn datasets; 33 use seeded synthetic generators. Difficulty spans easy (skewness, log transform) to hard (nested cross-validation, multicollinearity, Simpson's paradox).
+**43 tasks** across 5 categories: EDA (8), Feature Engineering (9), Modeling (8), Statistical Inference (9), ML Engineering (9). Difficulty spans easy (skewness, log transform) to hard (nested cross-validation, multicollinearity, Simpson's paradox). Three data provenance classes (see [Data provenance & contamination](#data-provenance--contamination)):
+
+- **33 clean synthetic** — seeded generators, ground-truth control, not memorisable.
+- **6 real** — publicly licensed UCI/sklearn datasets with independently computed ground truths.
+- **4 messy synthetic** — seeded generators that inject real-world dirt (duplicate rows, text-encoded numerics, inconsistent categorical labels, MNAR missingness, target leakage); the cleaning *is* the task. Newly added — **the leaderboard's 1,412 runs predate these 4, so they are not yet scored.**
 
 <details>
-<summary>All 39 tasks with descriptions</summary>
+<summary>All 43 tasks with descriptions</summary>
 
 The 6 real-data tasks (`eda_004`, `eda_005`, `feat_006`, `model_006`, `stat_006`, `mod_006`) use publicly licensed datasets from UCI and sklearn. Ground truths are computed independently from the actual data — reproducible by running `sklearn.datasets.load_*()` directly.
 
-### Exploratory Data Analysis (7 — 5 synthetic · 2 real)
+### Exploratory Data Analysis (8 — 5 synthetic · 2 real · 1 messy)
 
 | ID | Title | Difficulty | Key Concepts |
 |----|-------|:----------:|-------------|
@@ -253,8 +257,9 @@ The 6 real-data tasks (`eda_004`, `eda_005`, `feat_006`, `model_006`, `stat_006`
 | eda_005 ⭐ | **[Real]** Iris Dataset — Species Separability & Feature Importance | Easy | Real Fisher (1936) data, linear separability |
 | eda_006 | Salary Survey — Compensation Distribution & Benchmark Analysis | Easy | Skewness, log transform, department comparison |
 | eda_007 | Manufacturing Quality — Process Variation & Defect Analysis | Medium | Std dev by machine, defect rate, correlation |
+| eda_011 🧹 | **[Messy]** Data-Quality Audit of a Dirty Orders Export | Medium | Duplicate rows, text-encoded currency, inconsistent labels |
 
-### Feature Engineering (8 — 7 synthetic · 1 real)
+### Feature Engineering (9 — 7 synthetic · 1 real · 1 messy)
 
 | ID | Title | Difficulty | Key Concepts |
 |----|-------|:----------:|-------------|
@@ -266,6 +271,7 @@ The 6 real-data tasks (`eda_004`, `eda_005`, `feat_006`, `model_006`, `stat_006`
 | feat_006 ⭐ | **[Real]** Diabetes Dataset — Feature Correlation & Regression Baseline | Medium | Real Efron et al. (2004) data, feature ranking, R² |
 | feat_009 | Employee Attrition — Categorical Encoding & Feature Importance | Medium | Label vs one-hot, ordinal encoding, RF importance |
 | feat_010 | Retail Sales — Lag & Rolling Window Features for Time Series | Hard | Lag features, rolling mean, autocorrelation |
+| feat_011 🧹 | **[Messy]** Cleaning Dirty Sensor Readings with Non-Random Missingness | Medium | MNAR missingness, IQR outliers, duplicate packets |
 
 ### Modeling (8 — 7 synthetic · 1 real)
 
@@ -280,7 +286,7 @@ The 6 real-data tasks (`eda_004`, `eda_005`, `feat_006`, `model_006`, `stat_006`
 | model_009 | Wine Quality — Linear Regression vs Random Forest Comparison | Medium | RMSE, R², model comparison, numeric target |
 | model_010 | House Prices — Ridge vs Lasso Regularization Comparison | Medium | Regularization, sparsity, coefficient shrinkage |
 
-### Statistical Inference (8 — 7 synthetic · 1 real)
+### Statistical Inference (9 — 7 synthetic · 1 real · 1 messy)
 
 | ID | Title | Difficulty | Key Concepts |
 |----|-------|:----------:|-------------|
@@ -292,8 +298,9 @@ The 6 real-data tasks (`eda_004`, `eda_005`, `feat_006`, `model_006`, `stat_006`
 | stat_006 ⭐ | **[Real]** Iris Species — One-Way ANOVA for Petal Length Separation | Medium | Real Fisher (1936) data, ANOVA, F-statistic |
 | stat_009 | Salary Survey — Mann-Whitney Test for Non-Parametric Gender Comparison | Medium | Mann-Whitney U, non-parametric, null result |
 | stat_010 | Employee Attrition — Chi-Squared Test for Overtime & Attrition Independence | Easy | Chi-squared, contingency table, Cramér's V |
+| stat_011 🧹 | **[Messy]** Two-Group Test on a Survey with Dirty Labels & Duplicate Respondents | Medium | Label canonicalization, dedup, Welch t-test |
 
-### ML Engineering (8 — 7 synthetic · 1 real)
+### ML Engineering (9 — 7 synthetic · 1 real · 1 messy)
 
 | ID | Title | Difficulty | Key Concepts |
 |----|-------|:----------:|-------------|
@@ -305,8 +312,27 @@ The 6 real-data tasks (`eda_004`, `eda_005`, `feat_006`, `model_006`, `stat_006`
 | mod_006 ⭐ | **[Real]** Breast Cancer Wisconsin — K-Fold CV vs Hold-Out on Real Clinical Data | Medium | Real UCI data, CV variance, stratification |
 | mod_009 | Fraud Detection — Decision Threshold Optimization for Recall-Weighted F-Score | Medium | Threshold sweep, precision-recall, F-beta |
 | mod_010 | Credit Risk — Feature Importance Stability via Bootstrap Resampling | Hard | Bootstrap, stability, confidence intervals |
+| mod_011 🧹 | **[Messy]** Data-Quality & Leakage Gate Before Modeling Loan Defaults | Hard | Target leakage (AUC=1.0), dedup-before-split, dirty labels |
 
 </details>
+
+---
+
+## Data provenance & contamination
+
+Every serious benchmark now has to answer "could the model have seen this before?" Here's the honest accounting, by provenance class:
+
+| Class | Count | Memorisation risk | Real-world messiness | Why it's here |
+|-------|:--:|-------|-------|---------------|
+| **Clean synthetic** | 33 | **Low** — seeded `numpy` generators; the exact numbers can't be in training data | Low — cleaner than reality | Ground-truth control: the correct answer is computable exactly from the seed |
+| **Real (UCI/sklearn)** | 6 | **High** — Iris, Wine, Breast Cancer, Diabetes are the most-memorised datasets in ML; frontier models can often recite their structure | Low — these are textbook-clean | Distribution realism + independently computable ground truth — but see the caveat below |
+| **Messy synthetic** | 4 | **Low** — seeded, novel | **High** — duplicates, text-encoded numerics, inconsistent labels, MNAR nulls, target leakage | The cleaning *is* the task; rewards models that audit data instead of trusting it |
+
+**The honest caveat on the "real" tasks.** The six real datasets are `real_iris`, `real_wine`, `real_breast_cancer`, and `real_diabetes` — four of the most famous toy datasets in machine learning, all 150–700 rows, all plausibly memorised from training. They are the **worst of both worlds**: in-distribution for memorisation *and* far cleaner than operational data. They are kept for independently reproducible ground truth (run `sklearn.datasets.load_*()` yourself), not because they're hard. **A model reciting Iris petal-length statistics from memory is not evidence of data-analysis skill.** This is a known weakness of the original task set, stated plainly rather than hidden.
+
+**What the messy-synthetic tasks fix.** They address both failure modes the toy datasets share: they are seeded (so not memorisable) *and* dirty (so they penalise the over-clean assumption). A model that runs `df.mean()` on the raw frame gets the wrong answer — it must detect duplicates, parse text-encoded numbers, canonicalise inconsistent labels, recognise non-random missingness, and catch target leakage first. In our scoring sanity check, a correctly-cleaned answer scores 1.00 and a naive raw-frame answer scores 0.00 on every messy task.
+
+**What's still missing (roadmap).** These four are *synthetic* messiness — realistic dirt, but not literally a scraped real-world dataset. Genuinely external, license-cleared, harder-to-memorise data (e.g. a vendored UCI Adult/Census snapshot, NYC TLC, CDC BRFSS) is the next step; it was deferred here because the build environment blocks runtime dataset fetches and bundling external data has licensing/size/reproducibility tradeoffs that deserve their own PR.
 
 ---
 
@@ -321,7 +347,7 @@ Key result at [top](#uncertainty-prompting-experiment--headline-result). Per-mod
 - **Every score is independently reproducible.** [SCORING_SPEC.md](SCORING_SPEC.md) documents every formula, regex, threshold, and known limitation — no source code reading required.
 - **Known limitations are disclosed.** The stat-validity scorer is lexical. `scripts/calibrate_stat_validity.py` measures agreement between the lexical scorer and an LLM judge (Pearson r and Cohen's κ) to quantify the gap. The uncertainty-uplift experiment confirmed and localized the overcounting.
 - **Partial-coverage models are excluded from ranking.** Any model below 80% task coverage is flagged and unranked. Their scores are not averaged against different task sets.
-- **Datasets are real where it matters.** Six tasks use publicly licensed real-world datasets (UCI Breast Cancer, Iris, Diabetes, Wine) with ground truths computed independently.
+- **Data provenance is disclosed, including its weaknesses.** Six tasks use publicly licensed real datasets (UCI Breast Cancer, Iris, Diabetes, Wine) — but those are famous, memorisable toy sets, stated plainly in [Data provenance & contamination](#data-provenance--contamination). Four newer messy-synthetic tasks add seeded, non-memorisable real-world dirt (duplicates, text-encoded numerics, MNAR nulls, target leakage) where the cleaning is the task.
 - **The key experiment is pre-registered.** Outcome interpretations committed before any runs were executed. Results reported against those pre-committed criteria without post-hoc adjustment.
 - **CI leaderboard re-scores, does not rebuild from scratch.** Raw `outputs/` traces are not committed to the repo (size). The GitHub Actions leaderboard workflow re-scores the existing `docs/results.json` when scoring logic changes — it cannot regenerate run data. To extend the leaderboard, run `dab run --all --model <model> --runs 3` locally and update `docs/results.json`.
 
@@ -343,7 +369,7 @@ Key result at [top](#uncertainty-prompting-experiment--headline-result). Per-mod
 
 **Partially-lexical stat-validity scorer.** Check 1 (uncertainty quantification) was patched in v1.5 to require a decimal number within 200 characters of a keyword match — lexical-only matches now score 0.5× instead of 1.0×. Score impact: −0.001 to −0.034 per model across 1,356 traces. Residual limitation: the numeric-evidence window is loose (any decimal qualifies, not specifically a CI bound or SE). Check 3 (interpretation) remains fully lexical. See [SCORING_SPEC.md §4](SCORING_SPEC.md#4-statistical-validity--range-00-10) for the full spec.
 
-**Seeded synthetic datasets.** 33 of 39 tasks use reproducible generators — RDAB does not test robustness to real-world data quality issues (mixed dtypes, corrupted records, inconsistent encoding). The 6 real-data tasks partially address this.
+**Synthetic-heavy task set.** 33 of 43 tasks use clean seeded generators. Four newer **messy-synthetic** tasks now specifically test robustness to real-world data-quality issues — mixed/text-encoded dtypes, duplicate records, inconsistent categorical encoding, non-random (MNAR) missingness, and target leakage; the cleaning is the task. The 6 "real" datasets are famous, memorisable toy sets — see [Data provenance & contamination](#data-provenance--contamination). Genuinely external, license-cleared real data (e.g. a vendored UCI Adult/Census snapshot) remains future work.
 
 **String-match correctness.** Ground-truth matching checks for key values or phrases in the final answer. Verbose outputs may satisfy the check when terse correct outputs do not — most relevant to EDA tasks.
 
@@ -397,7 +423,7 @@ docs/
 
 ## Roadmap
 
-- **Done:** Task schema and harness (168 tests), 39 tasks, 12 models with live leaderboard, per-run cost tracking, category-aware scorer, 6 real-data tasks, LLM-as-judge calibration, multi-run CI; free models + gpt-4.1 family at full 39-task CI; two-model uncertainty-uplift experiment (GPT-4.1 complete, Llama partial — model-dependent effect confirmed); stat_validity v1.5 patch (numeric-evidence check, partial credit for lexical-only matches; −0.001 to −0.034 per model across 1,356 traces)
+- **Done:** Task schema and harness (188 tests), 43 tasks (39 scored on the leaderboard + 4 newly-added messy-data tasks), 12 models with live leaderboard, per-run cost tracking, category-aware scorer, 6 real-data tasks, published scorer-validity calibration (lexical vs LLM judge, per-category κ/r), subprocess-isolated code execution, multi-run CI; free models + gpt-4.1 family at full 39-task CI; two-model uncertainty-uplift experiment (GPT-4.1 complete, Llama partial — model-dependent effect confirmed); stat_validity v1.5 patch (numeric-evidence check, partial credit for lexical-only matches; −0.001 to −0.034 per model across 1,356 traces)
 - **In progress:** claude-haiku 39-task CI (33/39 → 39/39); calibration κ between lexical scorer and LLM judge (v1.5 re-run pending); Llama feat_002/model_003 V1 runs (pending daily TPD reset)
 - **Done (integration):** Tether + CostGuard `/replay` — production traces captured via Tether feed directly into CostGuard for RDAB-grounded cost-vs-quality comparison with 95% bootstrap CI
 - **Next:** NLP, visualization, and time-series task categories; arXiv paper
@@ -413,7 +439,7 @@ docs/
                in LLM Data Science Agents},
   year      = {2026},
   url       = {https://github.com/patibandlavenkatamanideep/RealDataAgentBench},
-  note      = {39 tasks, 4-dimensional scoring, 1{,}412 runs across 12 models.}
+  note      = {43 tasks (39 scored), 4-dimensional scoring, 1{,}412 runs across 12 models.}
 }
 ```
 

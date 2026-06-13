@@ -1,0 +1,82 @@
+task_id: feat_011
+title: "Cleaning Dirty Sensor Readings with Non-Random Missingness"
+difficulty: medium
+category: feature_engineering
+description: |
+  You are given RAW IoT sensor readings with real-world defects. Clean the data and
+  engineer trustworthy summary features. Report:
+
+  1. The number of exact duplicate rows in the raw data.
+  2. The number of missing values in the `reading` column (after removing exact
+     duplicates).
+  3. The number of outliers in `reading` using the IQR rule (a value below
+     Q1 − 1.5·IQR or above Q3 + 1.5·IQR), computed on the de-duplicated, non-missing
+     readings.
+  4. Whether the missingness in `reading` is missing-at-random or NOT — inspect
+     whether the probability of being missing depends on the reading magnitude, and
+     state the mechanism (e.g. MNAR / informative / not random) and why a naive mean
+     imputation would bias the result.
+  5. Note that the `unit` column has inconsistent labels for a single true unit.
+
+  Report exact integer counts.
+
+dataset:
+  generator: messy_sensor_data
+  seed: 42
+  n_rows: 700
+  schema:
+    sensor_id: int
+    reading: float
+    unit: str
+  injected_issues:
+    - duplicate_rows
+    - mnar_missingness
+    - outliers
+    - inconsistent_categoricals
+
+ground_truth:
+  duplicate_rows: 44
+  duplicate_rows_approx: 44
+  duplicate_rows_tolerance: 0
+  missing_readings: 56
+  missing_readings_approx: 56
+  missing_readings_tolerance: 0
+  iqr_outliers: 32
+  iqr_outliers_approx: 32
+  iqr_outliers_tolerance: 0
+  missingness_not_random: true
+  missingness_not_random_aliases:
+    - "mnar"
+    - "not at random"
+    - "not random"
+    - "not missing at random"
+    - "informative"
+    - "depends on"
+    - "correlated with"
+    - "saturat"
+    - "biased"
+  unit_labels_inconsistent: true
+  unit_labels_inconsistent_aliases:
+    - "inconsistent"
+    - "celsius"
+    - "same unit"
+    - "standardize"
+    - "canonical"
+    - "case"
+
+scoring:
+  correctness_weight: 0.45
+  code_quality_weight: 0.20
+  efficiency_weight: 0.15
+  stat_validity_weight: 0.20
+
+evaluation:
+  max_steps: 24
+  timeout_seconds: 150
+  allowed_tools:
+    - run_code
+
+tags:
+  - messy
+  - real_world
+  - data_cleaning

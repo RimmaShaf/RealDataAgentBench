@@ -124,7 +124,7 @@ class TestValidationRejection:
 class TestRegistry:
     def test_registry_loads_all(self):
         registry = TaskRegistry(TASKS_DIR)
-        assert len(registry) == 39
+        assert len(registry) == 43
 
     def test_registry_get(self):
         registry = TaskRegistry(TASKS_DIR)
@@ -145,16 +145,16 @@ class TestRegistry:
     def test_registry_filter_by_category(self):
         registry = TaskRegistry(TASKS_DIR)
         eda = registry.filter(category="eda")
-        assert len(eda) == 7
+        assert len(eda) == 8
         feat = registry.filter(category="feature_engineering")
-        assert len(feat) == 8
+        assert len(feat) == 9
 
     def test_registry_summary(self):
         registry = TaskRegistry(TASKS_DIR)
         summary = registry.summary()
-        assert summary["total"] == 39
-        assert summary["by_category"]["eda"] == 7
-        assert summary["by_category"]["feature_engineering"] == 8
+        assert summary["total"] == 43
+        assert summary["by_category"]["eda"] == 8
+        assert summary["by_category"]["feature_engineering"] == 9
 
     def test_contains(self):
         registry = TaskRegistry(TASKS_DIR)

@@ -9,6 +9,10 @@ Versions follow [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 ## [Unreleased]
 
 ### Added
+- **4 messy-synthetic tasks** (`eda_011`, `feat_011`, `stat_011`, `mod_011`) — seeded generators that inject real-world data dirt (duplicate rows, text-encoded numerics, inconsistent categorical labels, MNAR missingness, target leakage) where the cleaning *is* the task. Not memorisable and not clean, unlike the 6 toy "real" datasets. Generators: `messy_customer_orders`, `messy_sensor_data`, `messy_survey`, `messy_loan_applications`. +17 tests.
+- **Data provenance & contamination** README section — synthetic / real / messy breakdown with memorisation-risk accounting; owns the toy-dataset weakness.
+- **Scorer-validity calibration** published — lexical scorer vs LLM judge (Haiku 4.5), per-category Cohen's κ and Pearson r, committed `docs/scorer_calibration.json` + README "Scorer validity" section.
+- **Subprocess-isolated `run_code`** — agent code now runs in a short-lived child process with a wall-clock timeout and CPU limit (`RDAB_SANDBOX=inprocess` opts out); honest "restricted namespace, not a security sandbox" wording.
 - **Grok provider** (xAI) — `grok-3`, `grok-3-mini`, `grok-3-fast`, `grok-2-1212` via OpenAI-compatible API
 - **Gemini provider** (Google) — `gemini-2.5-flash`, `gemini-2.5-pro` via OpenAI-compatible API
 - **GPT-4.1 / GPT-5 family** — `gpt-4.1`, `gpt-4.1-mini`, `gpt-4.1-nano`, `gpt-5`, `gpt-5-mini`

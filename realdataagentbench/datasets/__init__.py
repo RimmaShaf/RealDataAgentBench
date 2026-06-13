@@ -31,6 +31,11 @@ from .generators.cv_comparison import generate as generate_cv_comparison
 from .generators.calibration_dataset import generate as generate_calibration
 from .generators.ensemble_dataset import generate as generate_ensemble
 from .generators.nested_cv_dataset import generate as generate_nested_cv
+# Messy real-world-style generators (seeded dirt: dupes, mixed types, dirty labels, MNAR nulls)
+from .generators.messy_customer_orders import generate as generate_messy_orders
+from .generators.messy_sensor_data import generate as generate_messy_sensors
+from .generators.messy_survey import generate as generate_messy_survey
+from .generators.messy_loan_applications import generate as generate_messy_loans
 
 GENERATORS = {
     "income_distribution": generate_income,
@@ -66,6 +71,11 @@ GENERATORS = {
     "real_wine": generate_real_wine,
     "real_wine_model": generate_real_wine_model,
     "real_iris": generate_real_iris,
+    # Messy real-world-style (seeded dirt — not memorisable, not clean)
+    "messy_customer_orders": generate_messy_orders,
+    "messy_sensor_data": generate_messy_sensors,
+    "messy_survey": generate_messy_survey,
+    "messy_loan_applications": generate_messy_loans,
 }
 
 

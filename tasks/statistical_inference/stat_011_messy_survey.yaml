@@ -1,0 +1,77 @@
+task_id: stat_011
+title: "Two-Group Test on a Survey with Dirty Labels and Duplicate Respondents"
+difficulty: medium
+category: statistical_inference
+description: |
+  You are given RAW A/B survey responses. Before testing, the data must be cleaned:
+
+  1. The `group` column uses inconsistent labels for the SAME two arms (e.g. "A",
+     "a", " A ", "group_a" all mean arm A; likewise for B). Standardize them.
+  2. Some `respondent_id` values are duplicated (a respondent submitted twice). Keep
+     ONE row per respondent (e.g. the first).
+  3. Some `score` values are missing — drop them for the comparison.
+
+  Then:
+  4. Report the number of duplicate respondent rows you removed.
+  5. State how many distinct TRUE arms remain after standardizing the labels.
+  6. Run an appropriate two-sample test (Welch's t-test or Mann–Whitney) comparing
+     `score` between the two arms. Report the p-value, whether the difference is
+     statistically significant at α = 0.05, and WHICH arm has the higher mean score.
+  7. Report uncertainty appropriately (the test statistic, p-value, and effect/means).
+
+dataset:
+  generator: messy_survey
+  seed: 42
+  n_rows: 500
+  schema:
+    respondent_id: int
+    group: str
+    score: float
+  injected_issues:
+    - inconsistent_categoricals
+    - duplicate_records
+    - missing_values
+
+ground_truth:
+  duplicate_respondents: 35
+  duplicate_respondents_approx: 35
+  duplicate_respondents_tolerance: 0
+  canonical_arms: 2
+  canonical_arms_approx: 2
+  canonical_arms_tolerance: 0
+  difference_significant: true
+  difference_significant_aliases:
+    - "statistically significant"
+    - "significant"
+    - "reject the null"
+    - "reject null"
+    - "p < 0.05"
+    - "p<0.05"
+    - "p < 0.001"
+    - "p < .001"
+  higher_arm: "group b"
+  higher_arm_aliases:
+    - "arm b"
+    - "b is higher"
+    - "b scored higher"
+    - "b had a higher"
+    - "higher mean in b"
+    - "b has the higher"
+    - "group b higher"
+
+scoring:
+  correctness_weight: 0.40
+  code_quality_weight: 0.15
+  efficiency_weight: 0.15
+  stat_validity_weight: 0.30
+
+evaluation:
+  max_steps: 24
+  timeout_seconds: 150
+  allowed_tools:
+    - run_code
+
+tags:
+  - messy
+  - real_world
+  - data_cleaning
