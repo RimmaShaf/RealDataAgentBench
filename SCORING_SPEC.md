@@ -39,10 +39,14 @@ Score = fraction of checks that pass.
 | ✅ Pass | *"The income distribution is strongly right-skewed (skewness ≈ 3.85). A log transformation is recommended."* | 1.0 |
 | ❌ Fail | *"I analyzed the dataset and found several interesting statistical properties worth exploring."* | 0.0 |
 
-**Honest limitations:**
-- Verbose outputs (e.g., a full numeric dump) can satisfy numeric checks by accident.
-- Substring matching is not semantic: an answer saying "right-skewed — no transformation needed" still passes the direction check despite the wrong recommendation.
-- No contradiction detection — correct facts alongside conflicting facts both count as passing.
+**Honest limitations — this is substring + numeric-tolerance matching, not a semantic check.** Like the stat-validity scorer (see [README → Scorer validity](README.md#scorer-validity)), correctness is a cheap proxy with both false positives and false negatives. The examples below are scored by the **actual** `CorrectnessScorer`:
+
+- **A number-spray games numeric checks.** For target `rate ≈ 0.22` (tol 0.05), the answer *"Possible rates I considered: 0.10, 0.18, 0.20, 0.25, 0.31, 0.44 — unsure which."* scores **1.00** — `0.20` and `0.25` land inside the tolerance even though the agent never committed to an answer. Verbose numeric dumps satisfy checks by accident (limitation **L6**).
+- **Thousands separators break a *correct* answer (false negative).** For total `≈ 90383.21`, the answer *"The total revenue is \$90,383.21."* scores **0.00** — the comma splits the number, so the regex matches `90` and `383.21`, neither near the target. The same answer written *"90383.21"* scores **1.00**. A correctly-formatted dollar figure is penalised purely for formatting.
+- **Alias substrings fire out of context (false positive).** For a boolean check `b_higher` with alias `"higher"`, the answer *"Group A had higher variance, but I did not compare the means."* scores **1.00** — "higher" matches even though it describes variance, not the group means the check is about.
+- **No contradiction detection / not semantic** — "right-skewed — no transformation needed" passes the direction check despite the wrong recommendation; correct facts alongside conflicting ones both count.
+
+**Takeaway:** treat an individual correctness score as a noisy proxy. Task authors mitigate this with tight tolerances and specific aliases, but the matcher itself is lexical.
 
 ---
 
@@ -60,9 +64,21 @@ Score = fraction of checks that pass.
 
 Score per snippet = checks passed / 5. Final = mean across snippets.
 
-**Honest limitations:**
-- Evaluates code *form*, not code *correctness* — a well-styled snippet can score 1.0 while computing the wrong statistic.
-- Multi-snippet averaging may mask quality degradation in later tool calls.
+**Honest limitations — this scores code *form*, and never executes the code.** The examples below are scored by the **actual** `CodeQualityScorer`:
+
+- **Form ≠ correctness — broken code can score 1.00.** `print(df['nonexistent_column'].mean())` references a column that does not exist and would raise `KeyError` at runtime, yet scores **1.00**: it pattern-matches vectorized ops, has no raw loop, no single-letter names, no magic numbers, and a `print(`. The scorer never runs it, so wrong (or crashing) code is rewarded as long as it *looks* clean.
+- **Clear, correct code is penalised (false negative).** A readable loop over two models —
+  ```python
+  models = {}
+  for name in ['ridge', 'lasso']:
+      m = fit(name)
+      models[name] = m.score(X_test, y_test)
+  print(models)
+  ```
+  scores **0.60** — dinged on *No raw loops* (the idiomatic `for name in [...]`) and *Descriptive names* (the one-letter `m`), both perfectly normal. So a model that writes nothing (→ 0.50 neutral) scores almost as well as one that writes good loop-based code, and a trivial one-liner outscores both.
+- **Multi-snippet averaging** can mask quality degradation in later tool calls.
+
+**Takeaway:** code quality is a style signal, not a correctness signal — it is deliberately decoupled from whether the code works (that is what the Correctness dimension is for), but it should not be read as evidence the code ran.
 
 ---
 
@@ -295,10 +311,11 @@ No source code required. Any reviewer can follow these steps:
 | ~~**L3**~~ | ~~Stat Validity~~ | ~~Check 1 accepts weak hedges ("approximately", "range") as uncertainty~~ | ✅ **Partially fixed in v1.5** — lexical-only matches now score 0.5×; numeric evidence required for full credit |
 | **L4** | Stat Validity | The scorer is lexical: it detects statistical *language*, not *validity*. Measured against an LLM judge (n=120, see [README → Scorer validity](README.md#scorer-validity)): overall Pearson r = 0.48, per-category Cohen's κ = 0.18–0.42 — **weak per-answer agreement, no category at κ ≥ 0.7**. It over-credits uncertainty (keyword salad) and under-credits interpretation (synonyms outside the vocab). Category-level *means* track the judge closely (bias −0.065), so aggregate conclusions hold; individual scores are a noisy proxy. | 🔴 Quantified, not yet fixed — use the LLM judge as primary scorer for rigorous per-answer work |
 | **L5** | Stat Validity | Check 4 (p-hacking) has never fired — aspirational guard | 🟡 Retained; patterns tightened in future iterations |
-| **L6** | Correctness | Verbose numeric outputs can pass checks by accidental inclusion | 🟡 Partially mitigated by task design |
-| **L7** | Correctness | No contradiction detection across sentences | 🟠 Known fundamental limit of string scoring |
-| **L8** | Code Quality | Evaluates code form, not code correctness | ⚪ By design |
+| **L6** | Correctness | Verbose numeric outputs / number-sprays can pass numeric checks by accidental inclusion. Worked example in §1. | 🟡 Partially mitigated by tight tolerances + specific aliases |
+| **L7** | Correctness | No contradiction detection / not semantic; alias substrings can fire out of context (worked example in §1). | 🟠 Known fundamental limit of string scoring |
+| **L8** | Code Quality | Evaluates code *form*, never executes it — crashing/wrong code can score 1.00; idiomatic loops + short names are penalised (worked examples in §2). | ⚪ By design (form ≠ correctness) — but do not read a high score as "the code ran" |
 | **L9** | Code Quality | Multi-snippet averaging may mask late-run quality issues | 🟢 Low impact, known |
+| **L10** | Correctness | The numeric matcher does not strip thousands separators, so a *correct* answer formatted as `$90,383.21` scores 0 while `90383.21` scores 1 (worked example in §1). | 🔴 Real bug — fix is to normalize digit grouping before regex; deferred because it would re-score existing leaderboard traces |
 
 ---
 
@@ -312,6 +329,7 @@ No source code required. Any reviewer can follow these steps:
 | 1.3 | 2026-04-18 | Condensed for print readability; promoted L1 and L2 to high priority |
 | **1.4** | **2026-04-25** | **Fixed L1: all four checks now category-aware. Check 3 (interpretation) has per-category signal lists for modeling/feature-engineering/ML engineering/stat-inference. Expanded Check 1 uncertainty vocab (bootstrap, variance, stability, robustness). Added `--temperature` flag for deterministic multi-run mode. 7 new tests.** |
 | **1.5** | **2026-05-10** | **Partially fixed L3: Check 1 now graded (1.0 / 0.5 / 0.0) based on numeric evidence. Keyword + decimal number within 200 chars → 1.0; keyword alone (lexical-only) → 0.5; no match → 0.0. Score impact across 1,356 re-scored traces: −0.001 to −0.034 per model, −0.007 to −0.019 per category. Largest drops: gpt-4o-mini (−0.032), llama (−0.034). Models with no uncertainty vocabulary unchanged (Gemini 2.5 Flash, claude-opus). Also: `scoring/__init__.py` LLMJudgeScorer import made lazy to avoid anthropic SDK timeout on scorer import.** |
+| **1.7** | **2026-06-13** | **Audited the Correctness and Code-Quality scorers to the same honesty bar as Stat-Validity. Added worked gaming/false-negative examples (scored by the actual scorers) to §1 and §2: number-spray → correctness 1.00, correct `$90,383.21` → 0.00 (comma bug), out-of-context alias → 1.00; crashing `df['nonexistent_column']` code → code-quality 1.00, idiomatic loop + short name → 0.60. Logged the thousands-separator matcher bug as L10 (real, deferred to avoid re-scoring). No scoring-logic changes — documentation only.** |
 | **1.6** | **2026-06-12** | **Quantified L4 with a published scorer-validity calibration. Ran the lexical scorer vs. an LLM judge (Haiku 4.5, structured rubric) on a stratified sample of 120 answers (24/category): overall Pearson r = 0.48; per-category Cohen's κ = 0.18–0.42 (no category ≥ 0.7). Lexical over-credits uncertainty (58% vs judge 33%) and under-credits interpretation (52% vs judge 67%); category means track closely (bias −0.065). Added per-category κ/r breakdown to `scripts/calibrate_stat_validity.py`, committed `docs/scorer_calibration.json`, added a [Scorer validity](README.md#scorer-validity) section to the README and two worked gaming/false-negative examples to §4. Corrected the script's Haiku cost constant to current pricing ($1/$5 per MTok).** |
 
 ---
