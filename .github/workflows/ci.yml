@@ -36,3 +36,16 @@ jobs:
         with:
           name: coverage-report
           path: .coverage
+
+  leaderboard-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Check index.html inline data is in sync with results.json
+        run: python scripts/sync_inline_leaderboard.py --check
