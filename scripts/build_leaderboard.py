@@ -59,19 +59,21 @@ def _ci(scores: list[float]) -> tuple[float, float, float, float]:
 REAL_DATA_TASK_IDS = {"eda_004", "eda_005", "feat_006", "model_006", "stat_006", "mod_006"}
 
 
-def build(
-    outputs_dir: Path = ROOT / "outputs",
-    docs_dir: Path = ROOT / "docs",
-    tasks_dir: Path = ROOT / "tasks",
-) -> None:
-    docs_dir.mkdir(exist_ok=True)
+def _compute(outputs_dir: Path, tasks_dir: Path) -> dict | None:
+    """Aggregate ``outputs_dir`` into a leaderboard dict, or ``None`` if empty.
+
+    This is the pure computation shared by :func:`build` (full rebuild) and
+    :func:`merge` (splice the current outputs' models into an existing
+    ``results.json``). It only ever knows about the models present in
+    ``outputs_dir`` — merging preserves every other model untouched.
+    """
     registry = TaskRegistry(tasks_dir)
     scorer = CompositeScorer()
 
     result_files = sorted(outputs_dir.glob("*.json"))
     if not result_files:
         print("No result files found in outputs/")
-        return
+        return None
 
     # Collect all valid runs; key = (task_id, model)
     all_runs: dict[tuple[str, str], list[dict]] = defaultdict(list)
@@ -162,7 +164,7 @@ def build(
         })
     summaries.sort(key=lambda x: x["avg_dab_score"], reverse=True)
 
-    output = {
+    return {
         "generated_at": datetime.now(timezone.utc).isoformat(),
         "pricing_as_of": PRICING_AS_OF,
         "total_runs": sum(len(v) for v in all_runs.values()),
@@ -170,10 +172,71 @@ def build(
         "runs": task_rows,
     }
 
+
+def _write(output: dict, docs_dir: Path) -> None:
+    docs_dir.mkdir(exist_ok=True)
     out_path = docs_dir / "results.json"
     out_path.write_text(json.dumps(output, indent=2))
-    print(f"Leaderboard written to {out_path} ({len(task_rows)} task-model pairs, {output['total_runs']} total runs)")
+    print(
+        f"Leaderboard written to {out_path} "
+        f"({len(output['runs'])} task-model pairs, {output['total_runs']} total runs)"
+    )
+
+
+def build(
+    outputs_dir: Path = ROOT / "outputs",
+    docs_dir: Path = ROOT / "docs",
+    tasks_dir: Path = ROOT / "tasks",
+) -> None:
+    """Full rebuild: regenerate results.json from every file in ``outputs_dir``."""
+    output = _compute(outputs_dir, tasks_dir)
+    if output is not None:
+        _write(output, docs_dir)
+
+
+def merge(
+    outputs_dir: Path = ROOT / "outputs",
+    docs_dir: Path = ROOT / "docs",
+    tasks_dir: Path = ROOT / "tasks",
+) -> None:
+    """Splice the models present in ``outputs_dir`` into the existing results.json.
+
+    Every model NOT present in ``outputs_dir`` is preserved exactly as-is. This is
+    the path for an external contributor who only holds their own raw outputs
+    (``outputs/*.json`` is gitignored, so a full rebuild would drop other models).
+    Idempotent: re-running replaces the contributed model's rows rather than
+    duplicating them.
+    """
+    fresh = _compute(outputs_dir, tasks_dir)
+    if fresh is None:
+        return
+
+    existing_path = docs_dir / "results.json"
+    if not existing_path.exists():
+        print("No existing results.json to merge into — doing a full write instead.")
+        _write(fresh, docs_dir)
+        return
+
+    existing = json.loads(existing_path.read_text())
+    new_models = {m["model"] for m in fresh["model_summary"]}
+
+    runs = [r for r in existing.get("runs", []) if r["model"] not in new_models] + fresh["runs"]
+    summary = [m for m in existing.get("model_summary", []) if m["model"] not in new_models] + fresh["model_summary"]
+    summary.sort(key=lambda x: x["avg_dab_score"], reverse=True)
+
+    merged = {
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "pricing_as_of": existing.get("pricing_as_of", PRICING_AS_OF),
+        "total_runs": sum(r["n_runs"] for r in runs),
+        "model_summary": summary,
+        "runs": runs,
+    }
+    _write(merged, docs_dir)
+    print(f"Merged models: {', '.join(sorted(new_models))}")
 
 
 if __name__ == "__main__":
-    build()
+    if "--merge" in sys.argv[1:]:
+        merge()
+    else:
+        build()
