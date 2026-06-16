@@ -63,7 +63,7 @@ def test_all_leaderboard_models_have_a_price():
     # otherwise its cost silently uses the conservative fallback.
     leaderboard_models = [
         "gpt-4.1", "gpt-4.1-mini", "gpt-4.1-nano", "gpt-4o", "gpt-4o-mini", "gpt-5",
-        "claude-sonnet-4-6", "claude-opus-4-6", "claude-haiku-4-5-20251001",
+        "claude-opus-4-8", "claude-sonnet-4-6", "claude-opus-4-6", "claude-haiku-4-5-20251001",
         "grok-3-mini", "gemini-2.5-flash", "llama-3.3-70b-versatile",
     ]
     missing = [m for m in leaderboard_models if m not in pricing.COST_PER_M_TOKENS]

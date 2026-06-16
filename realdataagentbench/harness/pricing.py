@@ -17,15 +17,16 @@ from datetime import date
 
 # Last time the prices below were checked against official pricing pages (YYYY-MM-DD).
 # Bump this whenever you review/update the table — the CI staleness check keys off it.
-PRICING_AS_OF = "2026-06-13"
+PRICING_AS_OF = "2026-06-15"
 # CI fails if the table is older than this (forces a roughly quarterly price review).
 MAX_PRICING_AGE_DAYS = 90
 
 # (input_$/M, output_$/M)
 COST_PER_M_TOKENS: dict[str, tuple[float, float]] = {
     # ── Anthropic ─────────────────────────────────────────────────────────────
+    "claude-opus-4-8":           (5.00,  25.00),
     "claude-sonnet-4-6":         (3.00,  15.00),
-    "claude-opus-4-6":           (15.00, 75.00),
+    "claude-opus-4-6":           (5.00,  25.00),
     "claude-haiku-4-5-20251001": (1.00,   5.00),
     # short aliases kept for backwards-compat with old output files
     "haiku":                     (1.00,   5.00),
