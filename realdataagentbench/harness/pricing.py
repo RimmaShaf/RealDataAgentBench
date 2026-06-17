@@ -59,6 +59,17 @@ COST_PER_M_TOKENS: dict[str, tuple[float, float]] = {
     "gemini-2.5-flash":          (0.15,   0.60),
     "gemini-2.0-flash":          (0.10,   0.40),
     "gemini-2.0-flash-lite":     (0.075,  0.30),
+    # ── Ollama (local — no API cost) ──────────────────────────────────────────
+    "gemma4":                    (0.00,   0.00),
+    "gemma4:27b":                (0.00,   0.00),
+    "gemma4:12b":                (0.00,   0.00),
+    "gemma3":                    (0.00,   0.00),
+    "gemma3:27b":                (0.00,   0.00),
+    "llama3.2":                  (0.00,   0.00),
+    "llama3.1":                  (0.00,   0.00),
+    "mistral":                   (0.00,   0.00),
+    "qwen2.5":                   (0.00,   0.00),
+    "phi4":                      (0.00,   0.00),
 }
 
 # Used when a model isn't in the table — conservative over-estimate.

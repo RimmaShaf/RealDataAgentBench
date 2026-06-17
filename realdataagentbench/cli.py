@@ -240,20 +240,27 @@ def score(result_file, task_id):
 @cli.command("models")
 def list_models():
     """Show supported models and which API keys are configured."""
-    from .harness.providers import ANTHROPIC_MODELS, GROQ_MODELS, OPENAI_MODELS
+    from .harness.providers import ANTHROPIC_MODELS, GEMINI_MODELS, GROK_MODELS, GROQ_MODELS, OLLAMA_MODELS, OPENAI_MODELS
 
     table = Table(title="Supported Models", show_lines=True)
     table.add_column("Model", style="cyan")
     table.add_column("Provider")
-    table.add_column("API Key")
+    table.add_column("API Key / Requirement")
     table.add_column("Free tier?")
 
     ant_key = "✓ set" if os.environ.get("ANTHROPIC_API_KEY") else "[red]✗ missing[/red]"
     oai_key = "✓ set" if os.environ.get("OPENAI_API_KEY") else "[red]✗ missing[/red]"
     groq_key = "✓ set" if os.environ.get("GROQ_API_KEY") else "[red]✗ missing[/red]"
+    xai_key = "✓ set" if os.environ.get("XAI_API_KEY") else "[red]✗ missing[/red]"
+    gemini_key = "✓ set" if os.environ.get("GEMINI_API_KEY") else "[red]✗ missing[/red]"
+    ollama_url = os.environ.get("OLLAMA_BASE_URL", "http://localhost:11434/v1")
+    ollama_status = f"[green]local ({ollama_url})[/green]"
 
-    _aliases = {"claude", "sonnet", "opus", "haiku", "gpt4o",
-                "groq", "llama", "llama-70b", "llama-8b", "mixtral"}
+    _aliases = {"claude", "sonnet", "opus", "haiku", "gpt4o", "gpt5", "gpt4.1",
+                "groq", "llama", "llama-70b", "llama-8b", "mixtral",
+                "grok", "grok-mini", "grok-fast",
+                "gemini", "gemini-pro", "gemini-flash",
+                "ollama", "gemma4", "gemma3", "gpt-4o-2024-11-20"}
 
     for m in sorted(ANTHROPIC_MODELS - _aliases):
         table.add_row(m, "Anthropic", ant_key, "No")
@@ -261,10 +268,18 @@ def list_models():
         table.add_row(m, "OpenAI", oai_key, "No")
     for m in sorted(GROQ_MODELS - _aliases):
         table.add_row(m, "Groq", groq_key, "[green]Yes[/green]")
+    for m in sorted(GROK_MODELS - _aliases):
+        table.add_row(m, "xAI", xai_key, "No")
+    for m in sorted(GEMINI_MODELS - _aliases):
+        table.add_row(m, "Google", gemini_key, "[green]Yes (limited)[/green]")
+    for m in sorted(OLLAMA_MODELS - _aliases):
+        table.add_row(m, "Ollama", ollama_status, "[green]Yes (local)[/green]")
 
     console.print(table)
     console.print("\n[dim]Groq free tier: https://console.groq.com — no credit card needed[/dim]")
-    console.print("[dim]Usage: dab run eda_001 --model groq --budget 0.05[/dim]")
+    console.print("[dim]Gemini free tier: https://aistudio.google.com — no credit card needed[/dim]")
+    console.print("[dim]Ollama (local): https://ollama.com — pull a model with: ollama pull gemma4[/dim]")
+    console.print("[dim]Usage: dab run eda_001 --model gemma4[/dim]")
 
 
 if __name__ == "__main__":
