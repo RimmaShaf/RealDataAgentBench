@@ -31,11 +31,22 @@ def _json_safe(obj: Any) -> str:
 # ── Model name aliases ────────────────────────────────────────────────────────
 
 ANTHROPIC_MODELS = {
+    "claude-opus-4-8",
     "claude-sonnet-4-6",
     "claude-opus-4-6",
     "claude-haiku-4-5-20251001",
     # short aliases
     "claude", "sonnet", "opus", "haiku",
+}
+
+# Models that reject sampling parameters (temperature/top_p/top_k) — the API
+# returns a 400 if they are sent. Sampling params were removed starting with
+# Opus 4.7; on these models steer behavior via prompting / effort instead.
+NO_SAMPLING_PARAM_MODELS = {
+    "claude-opus-4-8",
+    "claude-opus-4-7",
+    "claude-fable-5",
+    "claude-mythos-5",
 }
 
 OPENAI_MODELS = {
@@ -86,7 +97,9 @@ GEMINI_MODELS = {
 MODEL_ALIASES = {
     "claude": "claude-sonnet-4-6",
     "sonnet": "claude-sonnet-4-6",
-    "opus": "claude-opus-4-6",
+    "opus": "claude-opus-4-8",  # latest Opus; pin claude-opus-4-6 explicitly for the older line
+    "opus-4-8": "claude-opus-4-8",
+    "opus-4-6": "claude-opus-4-6",
     "haiku": "claude-haiku-4-5-20251001",
     # OpenAI shortcuts
     "gpt4o": "gpt-4o",
@@ -235,15 +248,18 @@ class AnthropicProvider(BaseProvider):
         messages: list[dict] = [{"role": "user", "content": task_description}]
         total_in, total_out = 0, 0
 
+        create_kwargs: dict = dict(
+            model=self.model,
+            max_tokens=4096,
+            system=SYSTEM_PROMPT,
+            tools=tools,
+        )
+        # Opus 4.7+ (and Fable/Mythos) reject `temperature` — omit it there.
+        if self.model not in NO_SAMPLING_PARAM_MODELS:
+            create_kwargs["temperature"] = temperature
+
         for _ in range(max_steps):
-            response = self.client.messages.create(
-                model=self.model,
-                max_tokens=4096,
-                temperature=temperature,
-                system=SYSTEM_PROMPT,
-                tools=tools,
-                messages=messages,
-            )
+            response = self.client.messages.create(messages=messages, **create_kwargs)
 
             input_tokens = response.usage.input_tokens
             output_tokens = response.usage.output_tokens

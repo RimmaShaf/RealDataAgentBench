@@ -31,8 +31,15 @@ All results land in `outputs/`. The files are named `<task_id>_<timestamp>.json`
 
 1. Fork the repository
 2. Copy your `outputs/*.json` files into the `outputs/` directory of your fork
-3. Run `python scripts/build_leaderboard.py` to regenerate `docs/results.json`
+3. Run `python scripts/build_leaderboard.py --merge` to splice your model into `docs/results.json`,
+   then `python scripts/sync_inline_leaderboard.py` to update the inline data in `docs/index.html`
 4. Open a PR with title: `Results: <model_name> — <n> tasks`
+
+> **Use `--merge`, not a bare rebuild.** `outputs/*.json` is gitignored, so your fork only
+> contains *your* model's run files. A plain `build_leaderboard.py` regenerates the leaderboard
+> from scratch and would drop every other model. `--merge` recomputes only the models present in
+> your `outputs/` and preserves all existing entries (it's idempotent — re-running replaces your
+> rows rather than duplicating them).
 
 Include in the PR description:
 - Model name and version
