@@ -735,7 +735,11 @@
   function renderInsights(summaries) {
     const eligible = summaries.filter(s => s.tasks_run >= 5);
     const best      = summaries[0];
-    const bestValue = [...eligible].sort((a, b) =>
+    // Cost-ratio comparisons are meaningless for $0 (local/free) models — they'd
+    // dominate this ratio by construction, not because they're a genuinely better
+    // value pick. Restrict the value insight to models with a real API cost.
+    const pricedEligible = eligible.filter(s => s.avg_cost_usd > 0);
+    const bestValue = [...pricedEligible].sort((a, b) =>
       (b.avg_dab_score / (b.avg_cost_usd || 0.0001)) -
       (a.avg_dab_score / (a.avg_cost_usd || 0.0001))
     )[0];
