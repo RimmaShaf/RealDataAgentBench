@@ -94,6 +94,21 @@ GEMINI_MODELS = {
     "gemini", "gemini-pro", "gemini-flash",
 }
 
+OLLAMA_MODELS = {
+    "gemma4",
+    "gemma4:27b",
+    "gemma4:12b",
+    "gemma3",
+    "gemma3:27b",
+    "llama3.2",
+    "llama3.1",
+    "mistral",
+    "qwen2.5",
+    "phi4",
+    # short alias
+    "ollama",
+}
+
 MODEL_ALIASES = {
     "claude": "claude-sonnet-4-6",
     "sonnet": "claude-sonnet-4-6",
@@ -119,6 +134,10 @@ MODEL_ALIASES = {
     "gemini": "gemini-2.5-flash",
     "gemini-pro": "gemini-2.5-pro",
     "gemini-flash": "gemini-2.5-flash",
+    # Ollama shortcuts
+    "ollama": "gemma4",
+    "gemma4": "gemma4",
+    "gemma3": "gemma3",
 }
 
 # COST_PER_M_TOKENS and compute_cost are imported from pricing.py above.
@@ -176,10 +195,12 @@ def get_provider(model: str, api_keys: dict[str, str] | None = None) -> "BasePro
         return GrokProvider(model, api_keys=api_keys)
     if model in GEMINI_MODELS or model.startswith("gemini"):
         return GeminiProvider(model, api_keys=api_keys)
+    if model in OLLAMA_MODELS or model.startswith(("gemma", "ollama/")):
+        return OllamaProvider(model, api_keys=api_keys)
     raise ValueError(
         f"Unknown model: {model!r}. "
         f"Supported prefixes: 'claude-*', 'gpt-*', 'llama-*'/'mixtral-*' (Groq), "
-        f"'grok-*' (xAI), 'gemini-*' (Google). "
+        f"'grok-*' (xAI), 'gemini-*' (Google), 'gemma*' (Ollama). "
         f"Add new providers in harness/providers.py."
     )
 
@@ -600,4 +621,117 @@ class GeminiProvider(OpenAIProvider):
             api_key=gemini_key,
             base_url="https://generativelanguage.googleapis.com/v1beta/openai/",
         )
+
+
+# ── Ollama provider (local OpenAI-compatible endpoint) ───────────────────────
+
+class OllamaProvider(OpenAIProvider):
+    """
+    Ollama runs open-weight models locally via an OpenAI-compatible API.
+    Install Ollama from https://ollama.com, then pull a model:
+
+      ollama pull gemma4
+
+    No API key required. Ollama must be running (ollama serve) before benchmarking.
+
+    Models to try:
+      dab run eda_001 --model gemma4         # gemma4 (default tag)
+      dab run eda_001 --model gemma4:27b     # gemma4 27B
+      dab run eda_001 --model gemma4:12b     # gemma4 12B
+      dab run eda_001 --model gemma3:27b     # gemma3 27B
+    """
+
+    _OLLAMA_SYSTEM_PROMPT = (
+        SYSTEM_PROMPT
+        + "\n\nIMPORTANT: When calling a tool you MUST use the JSON function-call "
+        "format provided by the API. Do NOT write <function=...> tags or any other "
+        "format — only use the structured tool_calls mechanism."
+    )
+
+    def __init__(self, model: str, api_keys: dict[str, str] | None = None):
+        BaseProvider.__init__(self, model)
+        from openai import OpenAI
+        base_url = (
+            (api_keys or {}).get("OLLAMA_BASE_URL")
+            or os.environ.get("OLLAMA_BASE_URL")
+            or "http://localhost:11434/v1"
+        )
+        self.client = OpenAI(
+            api_key="ollama",  # Ollama ignores the key but the client requires one
+            base_url=base_url,
+        )
+
+    def run(self, task_description, dataframe, max_steps, allowed_tools, tracer,
+            budget=None, temperature=1.0):
+        tools = self._filter_tools(allowed_tools)
+        oai_tools = self._tools_to_openai(tools)
+
+        messages = [
+            {"role": "system", "content": self._OLLAMA_SYSTEM_PROMPT},
+            {"role": "user", "content": task_description},
+        ]
+
+        assistant_text = ""
+        total_in, total_out = 0, 0
+
+        for _ in range(max_steps):
+            response = self._chat_with_retry(
+                model=self.model,
+                messages=messages,
+                tools=oai_tools,
+                tool_choice="auto",
+                max_completion_tokens=4096,
+                temperature=temperature,
+            )
+
+            choice = response.choices[0]
+            msg = choice.message
+            usage = response.usage
+
+            assistant_text = msg.content or ""
+            tool_calls = msg.tool_calls or []
+
+            in_tok = usage.prompt_tokens if usage else 0
+            out_tok = usage.completion_tokens if usage else 0
+            total_in += in_tok
+            total_out += out_tok
+
+            tracer.record(
+                role="assistant",
+                content=assistant_text,
+                input_tokens=in_tok,
+                output_tokens=out_tok,
+            )
+
+            self._check_budget(compute_cost(self.model, total_in, total_out), budget)
+
+            if choice.finish_reason == "stop" or not tool_calls:
+                return assistant_text
+
+            messages.append(msg)
+
+            for tc in tool_calls:
+                try:
+                    inputs = json.loads(tc.function.arguments)
+                except json.JSONDecodeError:
+                    inputs = {}
+
+                result = dispatch_tool(tc.function.name, inputs, dataframe)
+                result_str = json.dumps(result, default=_json_safe) if isinstance(result, dict) else str(result)
+
+                tracer.record(
+                    role="tool",
+                    content=result_str,
+                    tool_name=tc.function.name,
+                    tool_input=inputs,
+                    tool_output=result,
+                )
+
+                messages.append({
+                    "role": "tool",
+                    "tool_call_id": tc.id,
+                    "content": result_str,
+                })
+
+        return assistant_text
 
