@@ -102,6 +102,9 @@ OLLAMA_MODELS = {
     "gemma3:27b",
     "llama3.2",
     "llama3.1",
+    "llama3.3",
+    "llama3.3:70b",
+    "llama3.3:70b-instruct-q2_K",
     "mistral",
     "qwen2.5",
     "phi4",
@@ -189,14 +192,14 @@ def get_provider(model: str, api_keys: dict[str, str] | None = None) -> "BasePro
         return AnthropicProvider(model, api_keys=api_keys)
     if model.startswith(("gpt-", "gpt4")):
         return OpenAIProvider(model, api_keys=api_keys)
+    if model in OLLAMA_MODELS or model.startswith(("gemma", "ollama/")):
+        return OllamaProvider(model, api_keys=api_keys)
     if model in GROQ_MODELS or model.startswith(("llama", "mixtral", "gemma2")):
         return GroqProvider(model, api_keys=api_keys)
     if model in GROK_MODELS or model.startswith("grok"):
         return GrokProvider(model, api_keys=api_keys)
     if model in GEMINI_MODELS or model.startswith("gemini"):
         return GeminiProvider(model, api_keys=api_keys)
-    if model in OLLAMA_MODELS or model.startswith(("gemma", "ollama/")):
-        return OllamaProvider(model, api_keys=api_keys)
     raise ValueError(
         f"Unknown model: {model!r}. "
         f"Supported prefixes: 'claude-*', 'gpt-*', 'llama-*'/'mixtral-*' (Groq), "
@@ -659,6 +662,10 @@ class OllamaProvider(OpenAIProvider):
         self.client = OpenAI(
             api_key="ollama",  # Ollama ignores the key but the client requires one
             base_url=base_url,
+            # Local inference can stall for a long time under memory/swap
+            # pressure on large models — the 10-minute SDK default is too
+            # tight and turns slow-but-fine requests into hard failures.
+            timeout=3600.0,
         )
 
     def run(self, task_description, dataframe, max_steps, allowed_tools, tracer,
@@ -675,12 +682,13 @@ class OllamaProvider(OpenAIProvider):
         total_in, total_out = 0, 0
 
         for _ in range(max_steps):
+            # No max_completion_tokens cap — local inference has no per-token
+            # cost, and a 4096 cap truncates larger local models mid-reasoning.
             response = self._chat_with_retry(
                 model=self.model,
                 messages=messages,
                 tools=oai_tools,
                 tool_choice="auto",
-                max_completion_tokens=4096,
                 temperature=temperature,
             )
 
