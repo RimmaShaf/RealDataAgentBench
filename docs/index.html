@@ -750,20 +750,9 @@
     // Check if we have the ollama llama3.3 confirmation run
     const llamaOllama = summaries.find(s => s.model === 'llama3.3:70b-instruct-q2_K');
     const llamaGroq   = summaries.find(s => s.model === 'llama-3.3-70b-versatile');
-    const quantNote = (llamaOllama && llamaGroq) ? `
-      <div class="insight-box blue" style="border-color:#C4B5FD;background:#F5F3FF">
-        <div class="insight-icon">🔬</div>
-        <div>
-          <div class="insight-title" style="color:#6D28D9">Quantization Confirmation</div>
-          <div class="insight-body">
-            <strong>llama-3.3-70b-versatile</strong> (Groq) is itself a quantized deployment.
-            Performance was independently confirmed with a locally-served
-            <strong>q2_K quantized</strong> version via Ollama
-            (RDAB ${llamaOllama.avg_dab_score.toFixed(3)} vs ${llamaGroq.avg_dab_score.toFixed(3)}),
-            showing Llama 3.3 70B remains competitive even at aggressive quantization levels.
-          </div>
-        </div>
-      </div>` : '';
+    const quantConfirm = (llamaOllama && llamaGroq)
+      ? ` Performance was independently confirmed with a locally-served q2_K quantized version via Ollama (RDAB ${llamaOllama.avg_dab_score.toFixed(3)} vs ${llamaGroq.avg_dab_score.toFixed(3)}), showing Llama 3.3 70B remains competitive even at aggressive quantization levels.`
+      : '';
 
     document.getElementById('insights-row').innerHTML = `
       <div class="insight-box blue">
@@ -773,7 +762,7 @@
           <div class="insight-body">
             <strong>${bestValue.model}</strong> scores only ${scoreDiff}% below the top model
             at <strong>${ratio}× lower cost</strong> per task — the best statistical performance
-            per dollar on the benchmark.
+            per dollar on the benchmark.${quantConfirm}
           </div>
         </div>
       </div>
@@ -798,8 +787,7 @@
             fail to report uncertainty or draw causal conclusions from observational data.
           </div>
         </div>
-      </div>
-      ${quantNote}`;
+      </div>`;
   }
 
   function renderSnapshot(summaries) {
