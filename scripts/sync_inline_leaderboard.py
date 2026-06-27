@@ -24,9 +24,10 @@ INDEX = ROOT / "docs" / "index.html"
 
 _SUMMARY_RE = re.compile(r"const INLINE_SUMMARY = \[.*?\n  \];", re.DOTALL)
 _RUNS_RE = re.compile(r"const INLINE_RUNS = \[.*?\];", re.DOTALL)
+_UPDATED_RE = re.compile(r"'Updated [^']+'")
 
 
-def _render(data: dict) -> tuple[str, str]:
+def _render(data: dict) -> tuple[str, str, str]:
     summary = data["model_summary"]
     runs = data["runs"]
     summary_block = (
@@ -35,7 +36,10 @@ def _render(data: dict) -> tuple[str, str]:
         + "\n  ];"
     )
     runs_block = "const INLINE_RUNS = " + json.dumps(runs, separators=(",", ":")) + ";"
-    return summary_block, runs_block
+    from datetime import datetime, timezone
+    dt = datetime.fromisoformat(data["generated_at"]).astimezone(timezone.utc)
+    updated = "'Updated " + dt.strftime("%-d %b %Y") + "'"
+    return summary_block, runs_block, updated
 
 
 def main() -> None:
@@ -45,13 +49,14 @@ def main() -> None:
 
     data = json.loads(RESULTS.read_text())
     html = INDEX.read_text()
-    summary_block, runs_block = _render(data)
+    summary_block, runs_block, updated = _render(data)
 
     if not _SUMMARY_RE.search(html) or not _RUNS_RE.search(html):
         sys.exit("ERROR: could not locate INLINE_SUMMARY / INLINE_RUNS markers in index.html")
 
     new_html = _SUMMARY_RE.sub(lambda _: summary_block, html)
     new_html = _RUNS_RE.sub(lambda _: runs_block, new_html)
+    new_html = _UPDATED_RE.sub(updated, new_html)
 
     if args.check:
         if new_html != html:
