@@ -22,15 +22,15 @@
 
 ## TL;DR
 
-- **12 models · 39 scored tasks (43 in the suite) · 4-dimensional scoring** — correctness alone misses where agents fail in production data workflows
-- **gpt-4.1 leads at 0.875** — statistically tied with gpt-4.1-mini (0.870) at 65× higher cost per task; gpt-4.1-mini is the dominant cost-performance choice
-- **A free model (Llama 3.3-70b, 0.798) scores higher than GPT-5 (0.780)** — Llama at 39/39 tasks with multi-run CI; GPT-5 covered only 23/39 tasks single-run (cost-prohibitive to scale), so treat this as directional, not a head-to-head match
-- **Statistical validity is the differentiating dimension:** Claude leads on validity (Sonnet 0.851), GPT leads on correctness (gpt-4.1-mini 0.931) — the two correlate at r = 0.43, confirming they capture orthogonal capabilities
+- **14 models · 43 tasks · 4-dimensional scoring** — correctness alone misses where agents fail in production data workflows
+- **claude-opus-4-8 leads at 0.889** — ahead of gpt-4.1 and claude-sonnet-4-6 (both 0.875); among the cheaper models, gpt-4.1-mini (0.870 at $0.010/task) remains the dominant cost-performance choice
+- **A free model (Llama 3.3-70b, 0.798) scores higher than GPT-5 (0.779)** — Llama at full coverage with multi-run CI; GPT-5 covered only 23/43 tasks single-run (cost-prohibitive to scale), so treat this as directional, not a head-to-head match
+- **Statistical validity is the differentiating dimension:** Claude leads on validity (Sonnet 0.831), GPT leads on correctness (gpt-4.1-mini 0.931) — the two capture orthogonal capabilities
 - **Prompting partly closes the stat-validity gap** — explicit uncertainty instructions raised GPT-4.1's mean stat_validity from 0.550 to 1.000 (+0.450), but qualitative review shows the gain is genuine on metric-reporting tasks and primarily lexical on feature importance tasks
 
 ---
 
-## Leaderboard — 1,412+ runs · 12 models · 39 tasks
+## Leaderboard — 1,831 runs · 14 models · 43 tasks
 
 **→ [Open live leaderboard](https://patibandlavenkatamanideep.github.io/RealDataAgentBench/)** — filterable by category, sortable by score or cost
 
@@ -38,23 +38,25 @@
 
 | Rank | Model | RDAB Score | Runs | Cost / Task | Stat Validity | Coverage |
 |:----:|-------|:----------:|:----:|:-----------:|:-------------:|:--------:|
-| 1 | **gpt-4.1** | **0.875** | 119 | $0.033 | 0.747 | 39/39 ✓ |
-| 2 | **gpt-4.1-mini** | **0.870** | 133 | $0.010 | 0.746 | 39/39 ✓ |
-| — | claude-sonnet-4-6 ⚠️ | 0.857 | 29 | $0.317 | **0.851** | 23/39 |
-| 3 | gpt-4o | 0.851 | 130 | $0.053 | 0.751 | 39/39 ✓ |
-| — | claude-opus-4-6 ⚠️ | 0.846 | 23 | $1.628 | 0.793 | 23/39 |
-| 4 | grok-3-mini | 0.827 | 228 | $0.004 | 0.704 | 39/39 ✓ |
-| — | claude-haiku-4-5 † | 0.801 | 180 | $0.197 | 0.790 | 33/39 ↑ |
-| 5 | llama-3.3-70b | 0.798 | 71 | $0.002 | 0.694 | 39/39 ✓ |
-| 6 | gpt-4o-mini | 0.785 | 123 | $0.012 | 0.777 | 39/39 ✓ |
-| — | gpt-5 ⚠️ | 0.780 | 32 | $0.671 | 0.690 | 23/39 |
-| 7 | gemini-2.5-flash | 0.662 | 206 | $0.002 | 0.538 | 39/39 ✓ |
-| 8 | gpt-4.1-nano | 0.624 | 138 | $0.010 | 0.684 | 39/39 ✓ |
+| 1 | **claude-opus-4-8** | **0.889** | 120 | $0.195 | 0.786 | 43/43 ✓ |
+| 2 | **gpt-4.1** | **0.875** | 119 | $0.033 | 0.747 | 39/43 ✓ |
+| 3 | **claude-sonnet-4-6** | **0.875** | 89 | $0.198 | **0.831** | 43/43 ✓ |
+| 4 | gpt-4.1-mini | 0.870 | 133 | $0.010 | 0.746 | 39/43 ✓ |
+| 5 | claude-opus-4-6 † | 0.868 | 83 | $0.610 | 0.794 | 43/43 ✓ |
+| 6 | gpt-4o | 0.851 | 130 | $0.053 | 0.751 | 39/43 ✓ |
+| 7 | grok-3-mini | 0.827 | 228 | $0.004 | 0.704 | 39/43 ✓ |
+| 8 | claude-haiku-4-5 ‡ | 0.809 | 230 | $0.175 | 0.788 | 43/43 ✓ |
+| 9 | llama-3.3-70b | 0.798 | 71 | $0.002 | 0.694 | 39/43 ✓ |
+| 10 | gpt-4o-mini | 0.785 | 123 | $0.012 | 0.777 | 39/43 ✓ |
+| — | gpt-5 ⚠️ | 0.779 | 32 | $0.671 | 0.690 | 23/43 |
+| 11 | gemini-2.5-flash | 0.662 | 206 | $0.002 | 0.538 | 39/43 ✓ |
+| 12 | gpt-4.1-nano | 0.624 | 138 | $0.010 | 0.684 | 39/43 ✓ |
+| 13 | gemma4 | 0.555 | 129 | $0.000 | 0.470 | 43/43 ✓ |
 
-> ✓ = full 39-task multi-run CI &nbsp;·&nbsp; † = CI in progress &nbsp;·&nbsp; ⚠️ = single-run point estimate, no CI planned (cost-prohibitive)  
+> ✓ = full multi-run CI coverage (≥80% of 43 tasks) &nbsp;·&nbsp; ‡ = full coverage, heterogeneous run counts &nbsp;·&nbsp; † = mixed methodology (some tasks single-run, some at n=3) &nbsp;·&nbsp; ⚠️ = insufficient coverage, not ranked  
 > **Ranking requires ≥80% task coverage** — see [SCORING_SPEC.md §10](SCORING_SPEC.md#10-ranking-eligibility--coverage-threshold)
 
-> **Coverage caveats:** Models marked ⚠️ (Claude Sonnet, Claude Opus, GPT-5) cover 23/39 tasks — single-run, cost-prohibitive to scale. Their scores are point estimates with no CI and are not ranked. Cross-model comparisons involving ⚠️ models are directional signals, not controlled head-to-head results. Llama 3.3-70b vs GPT-5 (0.798 vs 0.780) is the most headline-able comparison — Llama at 39/39 full coverage with multi-run CI, but GPT-5's 23/39 single-run exposure means it ran a different (and likely easier) task mix, so the comparison is directional only. Findings that reference these models note this explicitly; all other findings involve ranked (✓) models only.
+> **Coverage caveats:** Only **gpt-5** (⚠️) remains unranked — it covers 23/43 tasks, single-run and cost-prohibitive to scale, so its score is a point estimate with no CI. Cross-model comparisons involving gpt-5 are directional signals, not controlled head-to-head results (its 23/43 exposure is a different, likely easier task mix). Two ranked models carry methodology notes: **claude-opus-4-6** († #5) reached full 43/43 coverage by completing 20 tasks at n=3 with 95% CI on top of its original 23 single-run (n=1) tasks, so its model-level CI is computed over a mix — treat its exact rank as directional. **claude-haiku-4-5** (‡ #8) has full coverage with heterogeneous run counts across tasks. All other ranked (✓) models have full multi-run CI coverage.
 
 ---
 
@@ -85,13 +87,13 @@ GPT-4.1 responded with genuine SE computations and bootstrap attempts. Llama's o
 >
 > | Category | Best Model | Avg RDAB |
 > |----------|-----------|:--------:|
-> | EDA | gpt-4.1-mini | 0.939 |
+> | EDA | gpt-4.1-mini | 0.940 |
 > | Feature Engineering | gpt-4.1 | 0.846 |
-> | Statistical Inference | gpt-4.1 | 0.957 |
-> | ML Engineering | gpt-4.1-mini | 0.866 |
-> | Modeling | claude-sonnet-4-6 ⚠️ | 0.871 |
+> | Statistical Inference | claude-opus-4-8 | 0.965 |
+> | ML Engineering | claude-opus-4-8 | 0.880 |
+> | Modeling | claude-sonnet-4-6 | 0.861 |
 >
-> Llama 3.3-70b (free, 39/39 tasks) scores higher than GPT-5 (0.798 vs 0.780) — see coverage caveats above. **Benchmark on your actual task mix before committing to a provider.**
+> Llama 3.3-70b (free, 39/43 tasks) scores higher than GPT-5 (0.798 vs 0.779) — see coverage caveats above. **Benchmark on your actual task mix before committing to a provider.**
 
 ---
 
@@ -239,7 +241,7 @@ The Stat-Validity scorer is **lexical** — it detects statistical *language* vi
 
 - **33 clean synthetic** — seeded generators, ground-truth control, not memorisable.
 - **6 real** — publicly licensed UCI/sklearn datasets with independently computed ground truths.
-- **4 messy synthetic** — seeded generators that inject real-world dirt (duplicate rows, text-encoded numerics, inconsistent categorical labels, MNAR missingness, target leakage); the cleaning *is* the task. Newly added — **the leaderboard's 1,412 runs predate these 4, so they are not yet scored.**
+- **4 messy synthetic** — seeded generators that inject real-world dirt (duplicate rows, text-encoded numerics, inconsistent categorical labels, MNAR missingness, target leakage); the cleaning *is* the task. **Scored for the five full-coverage models (claude-opus-4-8, -sonnet-4-6, -opus-4-6, -haiku-4-5, gemma4); the remaining models still cover the original 39.**
 
 <details>
 <summary>All 43 tasks with descriptions</summary>
@@ -373,7 +375,7 @@ Key result at [top](#uncertainty-prompting-experiment--headline-result). Per-mod
 
 **String-match correctness.** Ground-truth matching checks for key values or phrases in the final answer. Verbose outputs may satisfy the check when terse correct outputs do not — most relevant to EDA tasks.
 
-**Coverage policy.** Models below 80% task coverage are excluded from ranking. Currently ranked models (all 39/39): gpt-4.1, gpt-4.1-mini, gpt-4o, gpt-4o-mini, gpt-4.1-nano, grok-3-mini, llama-3.3-70b, gemini-2.5-flash. All others flagged as partial.
+**Coverage policy.** Models below 80% task coverage are excluded from ranking. Currently ranked (≥80% of 43 tasks): claude-opus-4-8, gpt-4.1, claude-sonnet-4-6, gpt-4.1-mini, claude-opus-4-6, gpt-4o, grok-3-mini, claude-haiku-4-5, llama-3.3-70b, gpt-4o-mini, gemini-2.5-flash, gpt-4.1-nano, gemma4. Only gpt-5 (23/43) remains flagged as partial.
 
 **No multi-turn, RAG, or long-context scenarios.** RDAB tests single-session agentic loops on structured tabular data only.
 
@@ -423,8 +425,8 @@ docs/
 
 ## Roadmap
 
-- **Done:** Task schema and harness (196 tests), 43 tasks (39 scored on the leaderboard + 4 newly-added messy-data tasks), 12 models with live leaderboard, per-run cost tracking, category-aware scorer, 6 real-data tasks, published scorer-validity calibration (lexical vs LLM judge, per-category κ/r), subprocess-isolated code execution, multi-run CI; free models + gpt-4.1 family at full 39-task CI; two-model uncertainty-uplift experiment (GPT-4.1 complete, Llama partial — model-dependent effect confirmed); stat_validity v1.5 patch (numeric-evidence check, partial credit for lexical-only matches; −0.001 to −0.034 per model across 1,356 traces)
-- **In progress:** claude-haiku 39-task CI (33/39 → 39/39); calibration κ between lexical scorer and LLM judge (v1.5 re-run pending); Llama feat_002/model_003 V1 runs (pending daily TPD reset)
+- **Done:** Task schema and harness (196 tests), 43 tasks, 14 models with live leaderboard (5 at full 43/43 coverage, the rest at the original 39), per-run cost tracking, category-aware scorer, 6 real-data tasks, published scorer-validity calibration (lexical vs LLM judge, per-category κ/r), subprocess-isolated code execution, multi-run CI; claude-haiku-4-5, claude-sonnet-4-6, claude-opus-4-6 and claude-opus-4-8 completed to full coverage; two-model uncertainty-uplift experiment (GPT-4.1 complete, Llama partial — model-dependent effect confirmed); stat_validity v1.5 patch (numeric-evidence check, partial credit for lexical-only matches; −0.001 to −0.034 per model across 1,356 traces)
+- **In progress:** calibration κ between lexical scorer and LLM judge (v1.5 re-run pending); Llama feat_002/model_003 V1 runs (pending daily TPD reset)
 - **Done (integration):** Tether + CostGuard `/replay` — production traces captured via Tether feed directly into CostGuard for RDAB-grounded cost-vs-quality comparison with 95% bootstrap CI
 - **Next:** NLP, visualization, and time-series task categories; arXiv paper
 
@@ -439,7 +441,7 @@ docs/
                in LLM Data Science Agents},
   year      = {2026},
   url       = {https://github.com/patibandlavenkatamanideep/RealDataAgentBench},
-  note      = {43 tasks (39 scored), 4-dimensional scoring, 1{,}412 runs across 12 models.}
+  note      = {43 tasks, 4-dimensional scoring, 1{,}831 runs across 14 models.}
 }
 ```
 
@@ -466,7 +468,7 @@ All dataset generators are seeded. Running with the same model and `--temperatur
 
 See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
 
-**→ [Submit your model's results](RESULTS_SUBMISSION.md)** — run all 39 tasks with the unmodified harness and open a PR. Community results strengthen the benchmark for everyone.
+**→ [Submit your model's results](RESULTS_SUBMISSION.md)** — run all 43 tasks with the unmodified harness and open a PR. Community results strengthen the benchmark for everyone.
 
 ---
 
@@ -474,7 +476,7 @@ See [CONTRIBUTING.md](CONTRIBUTING.md) for the full guide.
 
 RDAB is the benchmark layer of a three-project evaluation stack:
 
-- **RDAB (this repo)** — benchmark methodology. 39 tasks, 4-dimensional scoring, 1,412+ runs across 12 models.
+- **RDAB (this repo)** — benchmark methodology. 43 tasks, 4-dimensional scoring, 1,831 runs across 14 models.
 - **[CostGuard](https://github.com/patibandlavenkatamanideep/CostGuard)** — runtime layer. Applies RDAB-calibrated scoring on every proxy call; `POST /replay` replays production traces against alternate models with a 95% bootstrap CI and cost savings estimate.
 - **[Tether](https://github.com/patibandlavenkatamanideep/Tether)** — capture layer. Wraps OpenAI clients and persists every production call to SQLite. Feed the resulting database into CostGuard `/replay` to answer "can I use the cheaper model?" with statistical confidence.
 
